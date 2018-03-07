@@ -159,8 +159,7 @@ if __name__=="__main__":
     canvas.SetGridx()
     #canvas.SetGridy()
 
-    # need to define location in plot, can conflict with text
-    lg = r.TLegend(0.6,0.78,0.78,0.88)
+    lg = r.TLegend(0.6,0.18,0.78,0.28)
     lg.SetFillStyle(0)
     lg.SetLineColor(0)
     lg.SetBorderSize(0)
@@ -170,6 +169,7 @@ if __name__=="__main__":
 
 
     dicgraph={}
+    max_mass_idx=-1
     mass_for_latex=int(graph_array[0][1][0])*1.12
     color = [kBlue-4,kRed,kGreen-3,kViolet,kBlack]
     for s in xrange(len(signiList)):
@@ -187,7 +187,10 @@ if __name__=="__main__":
         dicgraph[str(s)].SetTitle( "" )
         dicgraph[str(s)].GetXaxis().SetTitle( "Mass [TeV]" )
         dicgraph[str(s)].GetYaxis().SetTitle( "Int. Luminosity [fb^{-1}]" )
-        dicgraph[str(s)].GetXaxis().SetLimits(Mass[0], Mass[-1])
+        # check if need to rescale x-axis
+        for d in Disco :
+          if d>1E+6 and max_mass_idx==-1: max_mass_idx=Disco.index(d)
+        dicgraph[str(s)].GetXaxis().SetLimits(Mass[0], Mass[max_mass_idx])
         if Disco[0]>1E+2:
             dicgraph[str(s)].SetMinimum(1E+2)
         elif Disco[0]>1E+1:
@@ -209,13 +212,13 @@ if __name__=="__main__":
       lg.AddEntry(dicgraph[str(s)],ana.replace('mumu','#mu#mu'),"L")
     if len(signiList)>1 : lg.Draw()
 
-    line1 = TLine(graph_array[s][1][0],2.5E+3,graph_array[s][1][-1],2.5E+3);
+    line1 = TLine(graph_array[s][1][0],2.5E+3,graph_array[s][1][max_mass_idx],2.5E+3);
     line1.SetLineWidth(3)
     line1.SetLineStyle(2)
     line1.SetLineColor(kGreen+3);
     line1.Draw("same");
 
-    line2 = TLine(graph_array[s][1][0],3E+4,graph_array[s][1][-1],3E+4);
+    line2 = TLine(graph_array[s][1][0],3E+4,graph_array[s][1][max_mass_idx],3E+4);
     line2.SetLineWidth(3)
     line2.SetLineStyle(2)
     line2.SetLineColor(kGreen+3);
