@@ -93,6 +93,17 @@ if __name__=="__main__":
     if len(masses_cms)>0: masses_cms, files_cms = (list(t) for t in zip(*sorted(zip(masses_cms, files_cms))))
 
 
+    # dav hack
+    do_SSM=False
+    if signal=="p8_pp_Zprime_VALUETeV_ttbar": do_SSM=True
+    XStheo_SSM = array( 'd' )
+    XStheo_SSM.append(6.481e-3)
+    XStheo_SSM.append(8.906e-4)
+    XStheo_SSM.append(1.965e-4)
+    XStheo_SSM.append(5.065e-5)
+    XStheo_SSM.append(1.541e-5)
+    XStheo_SSM.append(5.696e-6)
+
     XS=getXS(masses_nom, signal)
     XStheo=array('d')
     for v in XS:
@@ -122,6 +133,7 @@ if __name__=="__main__":
     gmed  = r.TGraph(nmass, masses_array, ExpMed)
     print XStheo
     gtheo = r.TGraph(nmass, masses_array, XStheo)
+    gtheo_SSM = r.TGraph(nmass, masses_array, XStheo_SSM)
 
     proc = '#sigma(pp #rightarrow Z\')*BR [pb]'
     if ops.name.find("ww")>=0 : proc = '#sigma(pp #rightarrow RSG)*BR [pb]'
@@ -140,6 +152,8 @@ if __name__=="__main__":
     gmed.GetYaxis().SetTitleOffset(1.6)
     gtheo.SetLineColor(2)
     gtheo.SetLineWidth(3)
+    gtheo_SSM.SetLineColor(4)
+    gtheo_SSM.SetLineWidth(3)
 
     g1s = r.TGraphAsymmErrors(nmass, masses_array, ExpMed,dummy,dummy,ExpM1,ExpP1)
     g1s.SetName("exp_pm1sig")
@@ -163,6 +177,7 @@ if __name__=="__main__":
     g2s.Draw("3")
     g1s.Draw("3")
     gtheo.Draw("L")
+    if do_SSM==True: gtheo_SSM.Draw("L")
     gmed.Draw("L")
 
 
@@ -202,7 +217,11 @@ if __name__=="__main__":
     lg.SetTextFont(42)
 
 
-    lg.AddEntry(gtheo,"Theory (LO prediction)","L")
+    if do_SSM==True :
+      lg.AddEntry(gtheo,    "Theory TC2 (LO prediction)","L")
+      lg.AddEntry(gtheo_SSM,"Theory SSM (LO prediction)","L")
+    else :
+      lg.AddEntry(gtheo,"Theory (LO prediction)","L")
     lg.AddEntry(gmed, "95% CL exp. limit FCC nom.", "L")
     lg.AddEntry(g1s,"95% CL exp. limit #pm1#sigma","F")
     lg.AddEntry(g2s,"95% CL exp. limit #pm2#sigma","F")
