@@ -25,7 +25,11 @@ def getXS(masses, template):
     XS=array('d')
     for m in masses:
         sig=template.replace('VALUE',str(m))
-        XS.append(mydict[sig]['crossSection'])
+        try: 
+            mydict[sig]
+            XS.append(mydict[sig]['crossSection'])
+        except KeyError, err:
+            print err
     return XS
 
 
@@ -47,6 +51,7 @@ if __name__=="__main__":
     parser.add_option('-p', '--plotname', dest='plotname', type=str, default='')
     parser.add_option('-c', '--file_cms', dest='files_cms', type=str, default='')
     parser.add_option('-s', '--signal', dest='signal', type=str, default='')
+    parser.add_option('-m', '--models', dest='models', type=str, default='')
 
     ops, args = parser.parse_args()
     args = split_comma_args(args)
@@ -79,6 +84,8 @@ if __name__=="__main__":
     print '=============================================='
 
 
+    models =  ops.models
+    models = models.split(" ")
     if len(masses_nom)!=len(files_nom):
         print 'different length for nominal, exit'
         sys.exit(2)
@@ -96,6 +103,7 @@ if __name__=="__main__":
     # dav hack
     do_SSM=False
     if signal=="p8_pp_Zprime_VALUETeV_ttbar": do_SSM=True
+ 
     XStheo_SSM = array( 'd' )
     XStheo_SSM.append(6.481e-3)
     XStheo_SSM.append(8.906e-4)
@@ -107,7 +115,7 @@ if __name__=="__main__":
     XS=getXS(masses_nom, signal)
     XStheo=array('d')
     for v in XS:
-        if signal=="p8_pp_Zprime_VALUETeV_ll": XStheo.append(v/3.)
+        if signal=="p8_pp_ZprimeSSM_VALUETeV_ll": XStheo.append(v/3.)
         else:  XStheo.append(v)
     nmass=len(files_nom)
 
@@ -188,17 +196,17 @@ if __name__=="__main__":
 
 
     XS=getXS(masses_cms, signal)
-    nmass=len(files_cms)
-
-    ExpMed = array( 'd' )
-    masses_array = array( 'd' )
-    for i in xrange(nmass):
-        rfile = r.TFile.Open(files_cms[i])
-        histo=rfile.Get('limit')
-        ExpMed.append(histo.GetBinContent(2)*XS[i])
-        masses_array.append(masses_nom[i])
-
     if len(masses_cms)>0:
+        nmass=len(files_cms)
+
+        ExpMed = array( 'd' )
+        masses_array = array( 'd' )
+        for i in xrange(nmass):
+            rfile = r.TFile.Open(files_cms[i])
+            histo=rfile.Get('limit')
+            ExpMed.append(histo.GetBinContent(2)*XS[i])
+            masses_array.append(masses_nom[i])
+
         gmed_cms  = r.TGraph(nmass, masses_array, ExpMed)
         gmed_cms.SetName("exp_median")
         gmed_cms.SetLineColor(1)
@@ -207,24 +215,63 @@ if __name__=="__main__":
         gmed_cms.Draw("L")
 
 
-
-    lg = r.TLegend(0.58,0.6,0.92,0.90)
+    lg = None
+    if len(models)>1 : lg = r.TLegend(0.58,0.5,0.90,0.88)
+    else:lg = r.TLegend(0.58,0.65,0.90,0.88)
+        
     lg.SetFillStyle(0)
     lg.SetLineColor(0)
     lg.SetBorderSize(0)
     lg.SetShadowColor(10)
-    lg.SetTextSize(0.020)
+    lg.SetTextSize(0.030)
     lg.SetTextFont(42)
 
+
+    lg.AddEntry(gmed, "Median expected.", "L")
+    lg.AddEntry(g1s,"95% expected","F")
+    lg.AddEntry(g2s,"68% expected","F")
+    lg.AddEntry(gtheo,"Z^{\prime}_{SSM}","L")
 
     if do_SSM==True :
       lg.AddEntry(gtheo,    "Theory TC2 (LO prediction)","L")
       lg.AddEntry(gtheo_SSM,"Theory SSM (LO prediction)","L")
-    else :
-      lg.AddEntry(gtheo,"Theory (LO prediction)","L")
-    lg.AddEntry(gmed, "95% CL exp. limit FCC nom.", "L")
-    lg.AddEntry(g1s,"95% CL exp. limit #pm1#sigma","F")
-    lg.AddEntry(g2s,"95% CL exp. limit #pm2#sigma","F")
+    elif len(models)>1 :
+        print "-----------------------------------------"
+        gtheolist={}
+        gtheocolorlist={'p8_pp_ZprimeCHI_VALUETeV_ll':4, 
+                        'p8_pp_ZprimePSI_VALUETeV_ll':5,
+                        'p8_pp_ZprimeLRM_VALUETeV_ll':6,
+                        'p8_pp_ZprimeETA_VALUETeV_ll':7,
+                        'p8_pp_ZprimeI_VALUETeV_ll':8,
+                        }
+        gtheonamelist={'p8_pp_ZprimeCHI_VALUETeV_ll':'\\chi', 
+                        'p8_pp_ZprimePSI_VALUETeV_ll':'\\psi',
+                        'p8_pp_ZprimeLRM_VALUETeV_ll':'LRM',
+                        'p8_pp_ZprimeETA_VALUETeV_ll':'\\eta',
+                        'p8_pp_ZprimeI_VALUETeV_ll':'I',
+                        }
+
+        for mod in models:
+            print 'model    ',mod
+            if mod=="":continue
+            XS=getXS(masses_nom, mod)
+            XStheo=array('d')
+            for v in XS:
+                if "p8_pp_Zprime" in mod and "ll" in mod: XStheo.append(v/3.)
+                else:  XStheo.append(v)
+            print 'loop models nmass ',nmass
+            print 'loop models mass array ',masses_array
+            print 'loop models xs     ',XS
+            print 'loop models xstheo ',XStheo
+            
+            gtheolist[mod] = r.TGraph(nmass, masses_array, XStheo)
+            gtheolist[mod].SetLineColor(gtheocolorlist[mod])
+            gtheolist[mod].SetLineWidth(2)
+
+            gtheolist[mod].Draw("L")
+            lg.AddEntry(gtheolist[mod], "Z^{\prime}_{%s}"%gtheonamelist[mod],"L")
+            #lg.AddEntry(gtheolist[mod], "Z^{'}_{%s}"%gtheonamelist[mod],"L")
+            
     if len(masses_cms)>0: lg.AddEntry(gmed_cms, "95% CL exp. limit CMS", "L")
 
     lg.Draw()
