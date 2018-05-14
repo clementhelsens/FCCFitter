@@ -234,8 +234,10 @@ if __name__=="__main__":
             dicgraph[str(s)].SetMinimum(1E+2)
         elif Disco[0]>1E+1:
             dicgraph[str(s)].SetMinimum(1E+1)
-        else :
+        elif Disco[0]>1E+0:
             dicgraph[str(s)].SetMinimum(1E+0)
+        else:
+            dicgraph[str(s)].SetMinimum(1E-1)
 
         dicgraph[str(s)].SetMaximum(1E+6)
         dicgraph[str(s)].GetXaxis().SetTitleOffset(1.3)
@@ -285,9 +287,9 @@ if __name__=="__main__":
     if the_ana=='llSSM'  : plotname+="Z\'_{SSM}"
     if the_ana=='ttSSM'  : plotname+="Z\'_{SSM} #rightarrow t#bar{t}"
     if the_ana=='ttTC2'  : plotname+="Z\' #rightarrow t#bar{t}"
-    if the_ana=='ll'     : plotname+="Z\' #rightarrow l^{+}l^{-}"
-    if the_ana=='ee'     : plotname+="Z\' #rightarrow e^{+}e^{-}"
-    if the_ana=='mumu'   : plotname+="Z\' #rightarrow #mu^{+}#mu^{-}"
+    if the_ana=='ll'     : plotname+="Z\'_{SSM} #rightarrow l^{+}l^{-}"
+    if the_ana=='ee'     : plotname+="Z\'_{SSM} #rightarrow e^{+}e^{-}"
+    if the_ana=='mumu'   : plotname+="Z\'_{SSM} #rightarrow #mu^{+}#mu^{-}"
     if the_ana=='ww'     : plotname+="RSG #rightarrow W^{+}W^{-}"
     if the_ana=='jj'     : plotname+="G* #rightarrow jet jet"
     if the_ana=='tautau' : plotname+="Z\'_{SSM} #rightarrow #tau^{+}#tau^{-}"
@@ -334,10 +336,12 @@ if __name__=="__main__":
     label.SetTextSize(0.03)
     label.DrawLatex(0.2,0.14, "Integrated luminosity versus mass for a 5 #sigma discovery")
     label.SetTextSize(0.036)
-    label.DrawLatex(the_pos,0.73, plotname)
+    #label.DrawLatex(the_pos,0.73, plotname)
+    label.DrawLatex(the_pos+0.3,0.79, plotname)
+
     label.SetTextSize(0.03)
     label.SetNDC(False)
-    mass_for_latex=int(xmin)*1.12
+    mass_for_latex=int(xmin)*1.5
     label.DrawLatex(mass_for_latex,0.7*30E+3, "30 ab^{-1}")
     label.DrawLatex(mass_for_latex,0.7*2.5E+3, "2.5 ab^{-1}")
 
