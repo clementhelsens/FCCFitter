@@ -145,7 +145,7 @@ if __name__=="__main__":
 
 
     gmed  = r.TGraph(nmass, masses_array, ExpMed)
-    print XStheo
+    print 'XStheo  ',XStheo
     gtheo = r.TGraph(nmass, masses_array, XStheo)
     gtheo_SSM = r.TGraph(nmass, masses_array, XStheo_SSM)
 
