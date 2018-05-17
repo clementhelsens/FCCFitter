@@ -1,1 +1,5 @@
 python python/limitplot.py -f "Outputs/fcc_v02/Qstar/jj/Qstar_jj_*TeV/Limits/*" -n "Qstar_jj_fcc_v02" -p "Q* \rightarrow jj" -s "p8_pp_ExcitedQ_VALUETeV_qq"
+python python/limitplot.py -f "Outputs/fcc_v02/Qstar/jj_5p/Qstar_jj_*TeV/Limits/*" -n "Qstar_jj_5p_fcc_v02" -p "Q* \rightarrow jj" -s "p8_pp_ExcitedQ_VALUETeV_qq"
+python python/limitplot.py -f "Outputs/fcc_v02/Qstar/jj_10p/Qstar_jj_*TeV/Limits/*" -n "Qstar_jj_10p_fcc_v02" -p "Q* \rightarrow jj" -s "p8_pp_ExcitedQ_VALUETeV_qq"
+python python/limitplot.py -f "Outputs/fcc_v02/Qstar/jj_15p/Qstar_jj_*TeV/Limits/*" -n "Qstar_jj_15p_fcc_v02" -p "Q* \rightarrow jj" -s "p8_pp_ExcitedQ_VALUETeV_qq"
+python python/limitplot.py -f "Outputs/fcc_v02/Qstar/jj_20p/Qstar_jj_*TeV/Limits/*" -n "Qstar_jj_20p_fcc_v02" -p "Q* \rightarrow jj" -s "p8_pp_ExcitedQ_VALUETeV_qq"

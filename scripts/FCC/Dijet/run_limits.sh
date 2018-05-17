@@ -1,5 +1,5 @@
 #!/bin/bash
-#to run ./script/FCC/Dijet/run_limits.sh fcc_v02 _sel1/_sel1_5p/_sel1_10p/_sel1_15p/_sel1_20p
+#to run ./scripts/FCC/Dijet/run_limits.sh fcc_v02 _sel1/_sel1_5p/_sel1_10p/_sel1_15p/_sel1_20p
 
 myversion=$1
 sel=$2
