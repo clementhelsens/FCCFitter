@@ -74,6 +74,7 @@ if __name__=="__main__":
     parser.add_option('-f', '--files', dest='files', type=str, default='')
     parser.add_option('-n', '--names', dest='names', type=str, default='')
     parser.add_option('-p', '--plot', dest='plot', type=str, default='')
+    parser.add_option('--helhc',  action='store_true')
 
     ops, args = parser.parse_args()
     signiDict=ops.files
@@ -255,13 +256,21 @@ if __name__=="__main__":
       lg.AddEntry(dicgraph[str(s)],lg_lbl,"L")
     if len(signiList)>1 : lg.Draw()
 
-    line1 = TLine(xmin,2.5E+3,xmax,2.5E+3);
+    line1=None
+    line2=None
+    if ops.helhc:
+        line1 = TLine(xmin,1E+3,xmax,1E+3);
+        line2 = TLine(xmin,1E+4,xmax,1E+4);
+    else:
+        line1 = TLine(xmin,2.5E+3,xmax,2.5E+3);
+        line2 = TLine(xmin,3E+4,xmax,3E+4);
+
+
     line1.SetLineWidth(3)
     line1.SetLineStyle(2)
     line1.SetLineColor(kGreen+3);
     line1.Draw("same");
 
-    line2 = TLine(xmin,3E+4,xmax,3E+4);
     line2.SetLineWidth(3)
     line2.SetLineStyle(2)
     line2.SetLineColor(kGreen+3);
@@ -332,7 +341,9 @@ if __name__=="__main__":
     label.SetTextSize(0.042)
     label.SetTextAlign(12)
     label.DrawLatex(the_pos,0.85, "FCC simulation")
-    label.DrawLatex(the_pos,0.79, "\sqrt{s}=100TeV")
+    if ops.helhc:    label.DrawLatex(the_pos,0.79, "\sqrt{s}=27TeV")
+    else: label.DrawLatex(the_pos,0.79, "\sqrt{s}=100TeV")
+
     label.SetTextSize(0.03)
     label.DrawLatex(0.2,0.14, "Integrated luminosity versus mass for a 5 #sigma discovery")
     label.SetTextSize(0.036)
@@ -342,8 +353,13 @@ if __name__=="__main__":
     label.SetTextSize(0.03)
     label.SetNDC(False)
     mass_for_latex=int(xmin)*1.5
-    label.DrawLatex(mass_for_latex,0.7*30E+3, "30 ab^{-1}")
-    label.DrawLatex(mass_for_latex,0.7*2.5E+3, "2.5 ab^{-1}")
+
+    if ops.helhc:
+        label.DrawLatex(mass_for_latex,0.7*10E+3, "10 ab^{-1}")
+        label.DrawLatex(mass_for_latex,0.7*1E+3, "1 ab^{-1}")
+    else:
+        label.DrawLatex(mass_for_latex,0.7*30E+3, "30 ab^{-1}")
+        label.DrawLatex(mass_for_latex,0.7*2.5E+3, "2.5 ab^{-1}")
 
 
     canvas.RedrawAxis()
