@@ -7,7 +7,9 @@ from os import listdir
 import os
 import glob
 import optparse
-procDict='/afs/cern.ch/work/h/helsens/public/FCCDicts/FCC_procDict_fcc_v02.json'
+procDict_FCC='/afs/cern.ch/work/h/helsens/public/FCCDicts/FCC_procDict_fcc_v02.json'
+procDict_HELHC='/afs/cern.ch/work/h/helsens/public/FCCDicts/HELHC_procDict_helhc_v01.json'
+
 
 #__________________________________________________________
 def getMasses(limit_files):
@@ -18,8 +20,12 @@ def getMasses(limit_files):
     return masses
 
 #__________________________________________________________
-def getXS(masses, template):
+def getXS(masses, template, name):
     mydict=None
+    procDict=None
+    if name.find("fcc")>=0: procDict=procDict_FCC
+    elif name.find("helhc")>=0: procDict=procDict_HELHC
+
     with open(procDict) as f:
         mydict = json.load(f)
     XS=array('d')
@@ -112,7 +118,7 @@ if __name__=="__main__":
     XStheo_SSM.append(1.541e-5)
     XStheo_SSM.append(5.696e-6)
 
-    XS=getXS(masses_nom, signal)
+    XS=getXS(masses_nom, signal, ops.name)
     XStheo=array('d')
     for v in XS:
         if signal=="p8_pp_ZprimeSSM_VALUETeV_ll": XStheo.append(v/3.)
@@ -195,7 +201,7 @@ if __name__=="__main__":
 #################################################
 
 
-    XS=getXS(masses_cms, signal)
+    XS=getXS(masses_cms, signal, ops.name)
     if len(masses_cms)>0:
         nmass=len(files_cms)
 
@@ -254,7 +260,7 @@ if __name__=="__main__":
         for mod in models:
             print 'model    ',mod
             if mod=="":continue
-            XS=getXS(masses_nom, mod)
+            XS=getXS(masses_nom, mod, ops.name)
             XStheo=array('d')
             for v in XS:
                 if "p8_pp_Zprime" in mod and "ll" in mod: XStheo.append(v/3.)
@@ -283,8 +289,15 @@ if __name__=="__main__":
     label.SetTextSize(0.042)
     label.SetTextAlign(12)
     label.DrawLatex(0.24,0.85, "FCC simulation")
-    label.DrawLatex(0.24,0.79, "\sqrt{s}=100TeV")
-    label.DrawLatex(0.24,0.73, "\int Ldt=30ab^{-1}")
+    if ops.name.find("fcc")>=0:
+        label.DrawLatex(0.24,0.79, "\sqrt{s}=100TeV")
+        label.DrawLatex(0.24,0.73, "\int Ldt=30ab^{-1}")
+    elif ops.name.find("helhc")>=0:
+        label.DrawLatex(0.24,0.79, "\sqrt{s}=27TeV")
+        label.DrawLatex(0.24,0.73, "\int Ldt=10ab^{-1}")
+    else :
+        print 'name does not contains fcc or helhc'
+        sys.exit(3)
     label.DrawLatex(0.24,0.15, ops.plotname)
 
 
