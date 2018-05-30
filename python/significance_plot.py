@@ -210,6 +210,8 @@ if __name__=="__main__":
         for d in Disco :
           if d>1E+6 and max_mass_idx==-1: max_mass_idx=Disco.index(d)
         xmax=Mass[max_mass_idx]
+      # protection
+      if xmax<=xmin : xmax=Mass[len(Disco)-1]
 
     # draw
     dicgraph={}
@@ -239,7 +241,8 @@ if __name__=="__main__":
         else:
             dicgraph[str(s)].SetMinimum(1E-1)
 
-        dicgraph[str(s)].SetMaximum(1E+6)
+        if Disco[0]<1E+6: dicgraph[str(s)].SetMaximum(1E+6)
+        if Disco[0]>Disco[len(Disco)-1]: dicgraph[str(s)].SetMaximum(Disco[0]*100.)
         dicgraph[str(s)].GetXaxis().SetTitleOffset(1.3)
         dicgraph[str(s)].GetYaxis().SetTitleOffset(1.6)
         dicgraph[str(s)].Draw("AC")
@@ -271,28 +274,32 @@ if __name__=="__main__":
     the_ana=''
     if 'ee' in namesList and 'mumu' in namesList and 'll' in namesList and 'tt' in namesList: the_ana='llSSM'
     if 'ee' in namesList and 'mumu' in namesList and 'll' in namesList: the_ana='llSSM'
-    elif 'SSM'    in namesList and "TC2" in namesList: the_ana='ttTC2'
-    elif 'TC2'    in namesList: the_ana='ttTC2'
-    elif 'tt'     in namesList: the_ana='ttTC2'
-    elif 'SSM'    in namesList: the_ana='ttSSM'
-    elif 'ee'     in namesList: the_ana='ee'
-    elif 'mumu'   in namesList: the_ana='mumu'
-    elif 'll'     in namesList: the_ana='ll'
-    elif 'ww'     in namesList: the_ana='ww'
-    elif 'jj'     in namesList: the_ana='jj'
-    elif 'tautau' in namesList: the_ana='tautau'
+    elif 'SSM'    in namesList and "TC2" in namesList : the_ana='ttTC2'
+    elif 'TC2'    in namesList                        : the_ana='ttTC2'
+    elif 'tt'     in namesList                        : the_ana='ttTC2'
+    elif 'SSM'    in namesList                        : the_ana='ttSSM'
+    elif 'ee'     in namesList                        : the_ana='ee'
+    elif 'mumu'   in namesList                        : the_ana='mumu'
+    elif 'll'     in namesList                        : the_ana='ll'
+    elif 'ww'     in namesList                        : the_ana='ww'
+    elif 'jj'     in namesList                        : the_ana='jj'
+    elif 'tautau' in namesList                        : the_ana='tautau'
+    elif 'mumu_flav_ano' in namesList                 : the_ana='mumu_flav_ano'
+    elif 'mumu_LQ'in namesList                        : the_ana='mumu_LQ'
     else : print "No associated channel, give it yourself by making your case for the_ana"
     # define the associated channel
     plotname = ""
-    if the_ana=='llSSM'  : plotname+="Z\'_{SSM}"
-    if the_ana=='ttSSM'  : plotname+="Z\'_{SSM} #rightarrow t#bar{t}"
-    if the_ana=='ttTC2'  : plotname+="Z\' #rightarrow t#bar{t}"
-    if the_ana=='ll'     : plotname+="Z\'_{SSM} #rightarrow l^{+}l^{-}"
-    if the_ana=='ee'     : plotname+="Z\'_{SSM} #rightarrow e^{+}e^{-}"
-    if the_ana=='mumu'   : plotname+="Z\'_{SSM} #rightarrow #mu^{+}#mu^{-}"
-    if the_ana=='ww'     : plotname+="RSG #rightarrow W^{+}W^{-}"
-    if the_ana=='jj'     : plotname+="G* #rightarrow jet jet"
-    if the_ana=='tautau' : plotname+="Z\'_{SSM} #rightarrow #tau^{+}#tau^{-}"
+    if the_ana=='llSSM'         : plotname+="Z\'_{SSM}"
+    if the_ana=='ttSSM'         : plotname+="Z\'_{SSM} #rightarrow t#bar{t}"
+    if the_ana=='ttTC2'         : plotname+="Z\' #rightarrow t#bar{t}"
+    if the_ana=='ll'            : plotname+="Z\'_{SSM} #rightarrow l^{+}l^{-}"
+    if the_ana=='ee'            : plotname+="Z\'_{SSM} #rightarrow e^{+}e^{-}"
+    if the_ana=='mumu'          : plotname+="Z\'_{SSM} #rightarrow #mu^{+}#mu^{-}"
+    if the_ana=='ww'            : plotname+="RSG #rightarrow W^{+}W^{-}"
+    if the_ana=='jj'            : plotname+="G* #rightarrow jet jet"
+    if the_ana=='tautau'        : plotname+="Z\'_{SSM} #rightarrow #tau^{+}#tau^{-}"
+    if the_ana=='mumu_flav_ano' : plotname+="Z\' #rightarrow #mu^{+}#mu^{-} (1710.06363)"
+    if the_ana=='mumu_LQ'       : plotname+="t-channel LQ #rightarrow #mu^{+}#mu^{-} (1710.06363)"
     # automatic position of caption
     left_pos=0.18
     center_pos=0.44
@@ -314,7 +321,7 @@ if __name__=="__main__":
     # match
     n_pos=0
     #print s_pos
-    if   'left'   in s_pos and 'center' in s_pos and 'right' in s_pos : n_pos=1
+    if   'left'   in s_pos and 'center' in s_pos and 'right' in s_pos : n_pos=0
     elif 'left'   in s_pos and 'center' in s_pos : n_pos=2
     elif 'left'   in s_pos and 'right'  in s_pos : n_pos=1
     elif 'center' in s_pos and 'right'  in s_pos : n_pos=0  
@@ -324,7 +331,9 @@ if __name__=="__main__":
     if n_pos==0 : the_pos=left_pos
     if n_pos==1 : the_pos=center_pos
     if n_pos==2 : the_pos=right_pos
-
+    # long title
+    if the_ana=='mumu_flav_ano' : the_pos=left_pos
+    if the_ana=='mumu_LQ' : the_pos=left_pos
 
     label = r.TLatex()
     label.SetNDC()
@@ -336,8 +345,8 @@ if __name__=="__main__":
     label.SetTextSize(0.03)
     label.DrawLatex(0.2,0.14, "Integrated luminosity versus mass for a 5 #sigma discovery")
     label.SetTextSize(0.036)
-    #label.DrawLatex(the_pos,0.73, plotname)
-    label.DrawLatex(the_pos+0.3,0.79, plotname)
+    if the_pos==left_pos : label.DrawLatex(the_pos,0.73, plotname)
+    else                 : label.DrawLatex(the_pos+0.3,0.79, plotname)
 
     label.SetTextSize(0.03)
     label.SetNDC(False)

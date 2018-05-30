@@ -230,11 +230,14 @@ if __name__=="__main__":
     lg.AddEntry(gmed, "Median expected.", "L")
     lg.AddEntry(g1s,"95% expected","F")
     lg.AddEntry(g2s,"68% expected","F")
-    lg.AddEntry(gtheo,"Z^{\prime}_{SSM}","L")
 
-    if do_SSM==True :
-      lg.AddEntry(gtheo,    "Theory TC2 (LO prediction)","L")
-      lg.AddEntry(gtheo_SSM,"Theory SSM (LO prediction)","L")
+    if signal=="mgp8_pp_Zprime_mumu_5f_Mzp_VALUETeV" : 
+      lg.AddEntry(gtheo,"Z^{\prime} (1710.06363)","L")
+    elif signal=="mgp8_pp_LQ_mumu_5f_MLQ_VALUETeV" :
+      lg.AddEntry(gtheo,"LQ (1710.06363)","L")
+    elif do_SSM==True :
+      lg.AddEntry(gtheo,    "Z^{\prime}_{TC2}","L")
+      lg.AddEntry(gtheo_SSM,"Z^{\prime}_{SSM}","L")
     elif len(models)>1 :
         print "-----------------------------------------"
         gtheolist={}
@@ -269,9 +272,12 @@ if __name__=="__main__":
             gtheolist[mod].SetLineWidth(2)
 
             gtheolist[mod].Draw("L")
+            lg.AddEntry(gtheo,"Z^{\prime}_{SSM}","L")
             lg.AddEntry(gtheolist[mod], "Z^{\prime}_{%s}"%gtheonamelist[mod],"L")
             #lg.AddEntry(gtheolist[mod], "Z^{'}_{%s}"%gtheonamelist[mod],"L")
-            
+    else :
+      lg.AddEntry(gtheo,"Z^{\prime}_{SSM}","L")
+        
     if len(masses_cms)>0: lg.AddEntry(gmed_cms, "95% CL exp. limit CMS", "L")
 
     lg.Draw()
