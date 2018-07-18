@@ -253,6 +253,10 @@ if __name__=="__main__":
       lg_lbl=ana
       lg_lbl=lg_lbl.replace('mumu','#mu#mu')
       lg_lbl=lg_lbl.replace('ll','#it{ll}')
+      lg_lbl=lg_lbl.replace('5p','5%')
+      lg_lbl=lg_lbl.replace('10p','10%')
+      lg_lbl=lg_lbl.replace('15p','15%')
+      lg_lbl=lg_lbl.replace('20p','20%')
       lg.AddEntry(dicgraph[str(s)],lg_lbl,"L")
     if len(signiList)>1 : lg.Draw()
 
