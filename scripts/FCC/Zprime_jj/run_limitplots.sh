@@ -1,0 +1,5 @@
+python python/limitplot.py -f "Outputs/fcc_v02/Zprime/jj/Zprime_jj_*TeV/Limits/*" -n "Zprime_jj_fcc_v02" -p "Z' \rightarrow jj" -s "p8_pp_ZprimeSSM_VALUETeV_jj"
+python python/limitplot.py -f "Outputs/fcc_v02/Zprime/jj_5p/Zprime_jj_*TeV/Limits/*" -n "Zprime_jj_5p_fcc_v02" -p "Z' \rightarrow jj" -s "p8_pp_ZprimeSSM_VALUETeV_jj"
+python python/limitplot.py -f "Outputs/fcc_v02/Zprime/jj_10p/Zprime_jj_*TeV/Limits/*" -n "Zprime_jj_10p_fcc_v02" -p "Z' \rightarrow jj" -s "p8_pp_ZprimeSSM_VALUETeV_jj"
+python python/limitplot.py -f "Outputs/fcc_v02/Zprime/jj_15p/Zprime_jj_*TeV/Limits/*" -n "Zprime_jj_15p_fcc_v02" -p "Z' \rightarrow jj" -s "p8_pp_ZprimeSSM_VALUETeV_jj"
+python python/limitplot.py -f "Outputs/fcc_v02/Zprime/jj_20p/Zprime_jj_*TeV/Limits/*" -n "Zprime_jj_20p_fcc_v02" -p "Z' \rightarrow jj" -s "p8_pp_ZprimeSSM_VALUETeV_jj"

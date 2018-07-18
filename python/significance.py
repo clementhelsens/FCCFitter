@@ -173,8 +173,13 @@ if __name__=="__main__":
     parser.add_option('-f', '--file', dest='files', type=str, default='', help='input files')
     parser.add_option('-n', '--n', dest='name', type=str, default='default',help='name of the output json file with signi and lumi for all masses')
     parser.add_option("-c", "--combined",action="store_true", dest="combined", default=False, help='run combined fit')
+    parser.add_option("-e","--exclude", type=str, default='',help="exclude pattern for glob")
     ops, args = parser.parse_args()
     config_files=glob.glob(ops.files)
+
+    if ops.exclude!='':
+        config_files=[f for f in config_files if ops.exclude not in f]
+        
     name = ops.name
     combined=ops.combined
     if not os.path.isdir("Data/"):
