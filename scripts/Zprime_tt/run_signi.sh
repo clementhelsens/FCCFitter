@@ -3,3 +3,5 @@ python python/significance.py -f "config_FCC/Zprime_tt/fcc_v02/cut_TRFbtag/Zprim
 python python/significance.py -f "config_FCC/Zprime_tt/fcc_v02/tagger_TC2/Zprime_sel0_*TeV.config" -n Zprime_tt_TC2_fcc_v02_tagger
 python python/significance.py -f "config_FCC/Zprime_tt/fcc_v02/tagger_TC2_TRFbtag/Zprime_sel0_*TeV.config" -n Zprime_tt_TC2_fcc_v02_tagger_TRFbtag
 python python/significance.py -f "config_FCC/Zprime_tt/fcc_v02/tagger_SSM_TRFbtag/Zprime_sel0_*TeV.config" -n Zprime_tt_SSM_fcc_v02_tagger_TRFbtag
+python python/significance.py -f "config_FCC/Zprime_tt/helhc_v01/tagger_TC2_TRFbtag/Zprime_sel0_*TeV.config" -n Zprime_tt_TC2_helhc_v01_tagger_TRFbtag
+python python/significance.py -f "config_FCC/Zprime_tt/helhc_v01/tagger_SSM_TRFbtag/Zprime_sel0_*TeV.config" -n Zprime_tt_SSM_helhc_v01_tagger_TRFbtag
