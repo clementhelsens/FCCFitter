@@ -7,7 +7,8 @@ from os import listdir
 import os
 import glob
 import optparse
-procDict='/afs/cern.ch/work/h/helsens/public/FCCDicts/FCC_procDict_fcc_v02.json'
+procDictFCChh='/afs/cern.ch/work/h/helsens/public/FCCDicts/FCC_procDict_fcc_v02.json'
+procDictHELHC='/afs/cern.ch/work/h/helsens/public/FCCDicts/HELHC_procDict_helhc_v01.json'
 
 #__________________________________________________________
 def getMasses(limit_files):
@@ -18,8 +19,11 @@ def getMasses(limit_files):
     return masses
 
 #__________________________________________________________
-def getXS(masses, template):
+def getXS(masses, template, isFCC):
     mydict=None
+    # fix
+    procDict=procDictFCChh
+    if isFCC==False : procDict=procDictHELHC
     with open(procDict) as f:
         mydict = json.load(f)
     XS=array('d')
@@ -71,6 +75,10 @@ if __name__=="__main__":
         files_cms=glob.glob(ops.files_cms)
         masses_cms=getMasses(files_cms)
 
+    isFCC=True
+    if ops.name.find("helhc_")>=0 : isFCC=False
+    print "Analysis isFCC=", isFCC
+
     signal = ops.signal
     print 'NOM=============================================='
     print masses_nom
@@ -82,7 +90,6 @@ if __name__=="__main__":
     print masses_cms
     print files_cms
     print '=============================================='
-
 
     models =  ops.models
     models = models.split(" ")
@@ -105,14 +112,23 @@ if __name__=="__main__":
     if signal=="p8_pp_Zprime_VALUETeV_ttbar": do_SSM=True
  
     XStheo_SSM = array( 'd' )
-    XStheo_SSM.append(6.481e-3)
-    XStheo_SSM.append(8.906e-4)
-    XStheo_SSM.append(1.965e-4)
-    XStheo_SSM.append(5.065e-5)
-    XStheo_SSM.append(1.541e-5)
-    XStheo_SSM.append(5.696e-6)
+    if isFCC==True:
+      XStheo_SSM.append(6.481e-3)
+      XStheo_SSM.append(8.906e-4)
+      XStheo_SSM.append(1.965e-4)
+      XStheo_SSM.append(5.065e-5)
+      XStheo_SSM.append(1.541e-5)
+      XStheo_SSM.append(5.696e-6)
+    else :
+      XStheo_SSM.append(0.331572)
+      XStheo_SSM.append(0.0141432)
+      XStheo_SSM.append(0.00142035)
+      XStheo_SSM.append(0.000216873)
+      XStheo_SSM.append(4.59795e-5)
+      XStheo_SSM.append(1.46051e-5)
+      XStheo_SSM.append(6.5528e-6)
 
-    XS=getXS(masses_nom, signal)
+    XS=getXS(masses_nom, signal, isFCC)
     XStheo=array('d')
     for v in XS:
         if signal=="p8_pp_ZprimeSSM_VALUETeV_ll": XStheo.append(v/3.)
@@ -195,7 +211,7 @@ if __name__=="__main__":
 #################################################
 
 
-    XS=getXS(masses_cms, signal)
+    XS=getXS(masses_cms, signal, isFCC)
     if len(masses_cms)>0:
         nmass=len(files_cms)
 
@@ -257,7 +273,7 @@ if __name__=="__main__":
         for mod in models:
             print 'model    ',mod
             if mod=="":continue
-            XS=getXS(masses_nom, mod)
+            XS=getXS(masses_nom, mod, isFCC)
             XStheo=array('d')
             for v in XS:
                 if "p8_pp_Zprime" in mod and "ll" in mod: XStheo.append(v/3.)
@@ -288,9 +304,14 @@ if __name__=="__main__":
     label.SetTextColor(1)
     label.SetTextSize(0.042)
     label.SetTextAlign(12)
-    label.DrawLatex(0.24,0.85, "FCC simulation")
-    label.DrawLatex(0.24,0.79, "\sqrt{s}=100TeV")
-    label.DrawLatex(0.24,0.73, "\int Ldt=30ab^{-1}")
+    if isFCC==True :
+      label.DrawLatex(0.24,0.85, "FCC simulation")
+      label.DrawLatex(0.24,0.79, "\sqrt{s}=100TeV")
+      label.DrawLatex(0.24,0.73, "\int Ldt=30ab^{-1}")
+    else :
+      label.DrawLatex(0.24,0.85, "HELHC simulation")
+      label.DrawLatex(0.24,0.79, "\sqrt{s}=27TeV")
+      label.DrawLatex(0.24,0.73, "\int Ldt=15ab^{-1}")
     label.DrawLatex(0.24,0.15, ops.plotname)
 
 
