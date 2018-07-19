@@ -80,9 +80,6 @@ if __name__=="__main__":
     signiDict=ops.files
     names=ops.names
 
-    isFCC = True
-    if signiDict.find("helhc")>=0 : isFCC = False
-    
     if not os.path.isdir("Plots/"):
         os.system('mkdir Plots')
 
