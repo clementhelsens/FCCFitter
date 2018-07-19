@@ -369,7 +369,6 @@ if __name__=="__main__":
     label.SetNDC(False)
     mass_for_latex=int(xmin)*1.5
 
-    print "DAVVVVV -> ", ops.helhc
     if ops.helhc:
         label.DrawLatex(mass_for_latex,0.7*15E+3, "15 ab^{-1}")
         label.DrawLatex(mass_for_latex,0.7*1E+3, "1 ab^{-1}")
