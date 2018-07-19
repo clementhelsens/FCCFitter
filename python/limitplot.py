@@ -89,7 +89,6 @@ if __name__=="__main__":
     print files_cms
     print '=============================================='
 
-
     models =  ops.models
     models = models.split(" ")
     if len(masses_nom)!=len(files_nom):
@@ -111,12 +110,21 @@ if __name__=="__main__":
     if signal=="p8_pp_Zprime_VALUETeV_ttbar": do_SSM=True
  
     XStheo_SSM = array( 'd' )
-    XStheo_SSM.append(6.481e-3)
-    XStheo_SSM.append(8.906e-4)
-    XStheo_SSM.append(1.965e-4)
-    XStheo_SSM.append(5.065e-5)
-    XStheo_SSM.append(1.541e-5)
-    XStheo_SSM.append(5.696e-6)
+    if name.find("fcc")>=0:
+      XStheo_SSM.append(6.481e-3)
+      XStheo_SSM.append(8.906e-4)
+      XStheo_SSM.append(1.965e-4)
+      XStheo_SSM.append(5.065e-5)
+      XStheo_SSM.append(1.541e-5)
+      XStheo_SSM.append(5.696e-6)
+    elif name.find("helhc")>=0 :
+      XStheo_SSM.append(0.331572)
+      XStheo_SSM.append(0.0141432)
+      XStheo_SSM.append(0.00142035)
+      XStheo_SSM.append(0.000216873)
+      XStheo_SSM.append(4.59795e-5)
+      XStheo_SSM.append(1.46051e-5)
+      XStheo_SSM.append(6.5528e-6)
 
     XS=getXS(masses_nom, signal, ops.name)
     XStheo=array('d')
@@ -302,16 +310,17 @@ if __name__=="__main__":
     label.SetTextColor(1)
     label.SetTextSize(0.042)
     label.SetTextAlign(12)
-    label.DrawLatex(0.24,0.85, "FCC simulation")
-    if ops.name.find("fcc")>=0:
-        label.DrawLatex(0.24,0.79, "\sqrt{s}=100TeV")
-        label.DrawLatex(0.24,0.73, "\int Ldt=30ab^{-1}")
-    elif ops.name.find("helhc")>=0:
-        label.DrawLatex(0.24,0.79, "\sqrt{s}=27TeV")
-        label.DrawLatex(0.24,0.73, "\int Ldt=10ab^{-1}")
+    if name.find("fcc")>=0 :
+      label.DrawLatex(0.24,0.85, "FCC simulation")
+      label.DrawLatex(0.24,0.79, "\sqrt{s}=100TeV")
+      label.DrawLatex(0.24,0.73, "\int Ldt=30ab^{-1}")
+    elif name.find("helhc")>=0 :
+      label.DrawLatex(0.24,0.85, "HELHC simulation")
+      label.DrawLatex(0.24,0.79, "\sqrt{s}=27TeV")
+      label.DrawLatex(0.24,0.73, "\int Ldt=15ab^{-1}")
     else :
-        print 'name does not contains fcc or helhc'
-        sys.exit(3)
+      print 'name does not contains fcc or helhc'
+       sys.exit(3)
     label.DrawLatex(0.24,0.15, ops.plotname)
 
 

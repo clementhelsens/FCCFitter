@@ -79,6 +79,9 @@ if __name__=="__main__":
     ops, args = parser.parse_args()
     signiDict=ops.files
     names=ops.names
+
+    isFCC = True
+    if signiDict.find("helhc")>=0 : isFCC = False
     
     if not os.path.isdir("Plots/"):
         os.system('mkdir Plots')
@@ -353,10 +356,12 @@ if __name__=="__main__":
     label.SetTextColor(1)
     label.SetTextSize(0.042)
     label.SetTextAlign(12)
-    label.DrawLatex(the_pos,0.85, "FCC simulation")
-    if ops.helhc:    label.DrawLatex(the_pos,0.79, "\sqrt{s}=27TeV")
-    else: label.DrawLatex(the_pos,0.79, "\sqrt{s}=100TeV")
-
+    if ops.helhc:
+      label.DrawLatex(the_pos,0.85, "HELHC simulation")
+      label.DrawLatex(the_pos,0.79, "\sqrt{s}=27TeV")
+    else:
+      label.DrawLatex(the_pos,0.85, "FCC simulation")
+      label.DrawLatex(the_pos,0.79, "\sqrt{s}=100TeV")
     label.SetTextSize(0.03)
     label.DrawLatex(0.2,0.14, "Integrated luminosity versus mass for a 5 #sigma discovery")
     label.SetTextSize(0.036)

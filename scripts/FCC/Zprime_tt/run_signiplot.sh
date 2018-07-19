@@ -4,4 +4,6 @@ python python/significance_plot.py -f "Data/Zprime_tt_TC2_fcc_v02_tagger.json" -
 python python/significance_plot.py -f "Data/Zprime_tt_TC2_fcc_v02_tagger_TRFbtag.json" -n "TC2" -p tt_TC2_tagger_TRFbtag
 python python/significance_plot.py -f "Data/Zprime_tt_SSM_fcc_v02_tagger_TRFbtag.json" -n "SSM" -p tt_SSM_tagger_TRFbtag
 python python/significance_plot.py -f "Data/Zprime_tt_SSM_fcc_v02_tagger_TRFbtag.json Data/Zprime_tt_TC2_fcc_v02_tagger_TRFbtag.json" -n "SSM TC2" -p tt_SSM_TC2_tagger_TRFbtag
-
+python python/significance_plot.py -f "Data/Zprime_tt_TC2_helhc_v01_tagger_TRFbtag.json" -n "TC2" -p tt_TC2_tagger_TRFbtag
+python python/significance_plot.py -f "Data/Zprime_tt_SSM_helhc_v01_tagger_TRFbtag.json" -n "SSM" -p tt_SSM_tagger_TRFbtag
+python python/significance_plot.py -f "Data/Zprime_tt_SSM_helhc_v01_tagger_TRFbtag.json Data/Zprime_tt_TC2_helhc_v01_tagger_TRFbtag.json" -n "SSM TC2" -p tt_SSM_TC2_tagger_TRFbtag
