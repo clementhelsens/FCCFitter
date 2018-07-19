@@ -270,7 +270,7 @@ if __name__=="__main__":
     line2=None
     if ops.helhc:
         line1 = TLine(xmin,1E+3,xmax,1E+3);
-        line2 = TLine(xmin,1E+4,xmax,1E+4);
+        line2 = TLine(xmin,1.5E+4,xmax,1.5E+4);
     else:
         line1 = TLine(xmin,2.5E+3,xmax,2.5E+3);
         line2 = TLine(xmin,3E+4,xmax,3E+4);
@@ -373,7 +373,7 @@ if __name__=="__main__":
     mass_for_latex=int(xmin)*1.5
 
     if ops.helhc:
-        label.DrawLatex(mass_for_latex,0.7*10E+3, "10 ab^{-1}")
+        label.DrawLatex(mass_for_latex,0.7*15E+3, "15 ab^{-1}")
         label.DrawLatex(mass_for_latex,0.7*1E+3, "1 ab^{-1}")
     else:
         label.DrawLatex(mass_for_latex,0.7*30E+3, "30 ab^{-1}")
