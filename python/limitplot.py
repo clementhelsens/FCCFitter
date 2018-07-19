@@ -153,14 +153,20 @@ if __name__=="__main__":
 
 
     gmed  = r.TGraph(nmass, masses_array, ExpMed)
-    print XStheo
+    print 'XStheo  ',XStheo
     gtheo = r.TGraph(nmass, masses_array, XStheo)
     gtheo_SSM = r.TGraph(nmass, masses_array, XStheo_SSM)
 
     proc = '#sigma(pp #rightarrow Z\')*BR [pb]'
-    if ops.name.find("ww")>=0 : proc = '#sigma(pp #rightarrow RSG)*BR [pb]'
-    if ops.name.find("jj")>=0 : proc = '#sigma(pp #rightarrow Q*)*BR [pb]'
-    
+    theoname = "Z^{\prime}_{SSM}"
+
+    if ops.name.find("ww")>=0 : 
+        proc = '#sigma(pp #rightarrow RSG)*BR [pb]'
+        theoname = 'RSG Pythia8 LO'
+    if ops.name.find("jj")>=0 : 
+        proc = '#sigma(pp #rightarrow Q*)*BR [pb]'
+        theoname = 'Q* Pythia8 LO'
+
     gmed.SetName("exp_median")
     gmed.SetLineColor(1)
     gmed.SetLineStyle(2)
@@ -244,6 +250,8 @@ if __name__=="__main__":
     lg.AddEntry(gmed, "Median expected.", "L")
     lg.AddEntry(g1s,"95% expected","F")
     lg.AddEntry(g2s,"68% expected","F")
+    #lg.AddEntry(gtheo,"Z^{\prime}_{SSM}","L")
+    lg.AddEntry(gtheo,theoname,"L")
 
     if signal=="mgp8_pp_Zprime_mumu_5f_Mzp_VALUETeV" : 
       lg.AddEntry(gtheo,"Z^{\prime} (1710.06363)","L")
