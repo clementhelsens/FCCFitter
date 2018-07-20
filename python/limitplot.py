@@ -110,14 +110,14 @@ if __name__=="__main__":
     if signal=="p8_pp_Zprime_VALUETeV_ttbar": do_SSM=True
  
     XStheo_SSM = array( 'd' )
-    if name.find("fcc")>=0:
+    if ops.name.find("fcc")>=0:
       XStheo_SSM.append(6.481e-3)
       XStheo_SSM.append(8.906e-4)
       XStheo_SSM.append(1.965e-4)
       XStheo_SSM.append(5.065e-5)
       XStheo_SSM.append(1.541e-5)
       XStheo_SSM.append(5.696e-6)
-    elif name.find("helhc")>=0 :
+    elif ops.name.find("helhc")>=0 :
       XStheo_SSM.append(0.331572)
       XStheo_SSM.append(0.0141432)
       XStheo_SSM.append(0.00142035)
@@ -251,12 +251,27 @@ if __name__=="__main__":
     lg.AddEntry(g1s,"95% expected","F")
     lg.AddEntry(g2s,"68% expected","F")
     #lg.AddEntry(gtheo,"Z^{\prime}_{SSM}","L")
-    lg.AddEntry(gtheo,theoname,"L")
+    sig_found=True
+    if signal.find("p8_pp_Zprime")>=0 and signal.find("_VALUETeV_jj")>=0: sig_found=False
+    if sig_found==True :
+      lg.AddEntry(gtheo,theoname,"L")
 
     if signal=="mgp8_pp_Zprime_mumu_5f_Mzp_VALUETeV" : 
       lg.AddEntry(gtheo,"Z^{\prime} (1710.06363)","L")
     elif signal=="mgp8_pp_LQ_mumu_5f_MLQ_VALUETeV" :
       lg.AddEntry(gtheo,"LQ (1710.06363)","L")
+    elif signal=="p8_pp_ZprimeCHI_VALUETeV_jj" :
+      lg.AddEntry(gtheo,"Z^{\prime}_{\\chi}","L")
+    elif signal=="p8_pp_ZprimePSI_VALUETeV_jj" :
+      lg.AddEntry(gtheo,"Z^{\prime}_{\\psi}","L")
+    elif signal=="p8_pp_ZprimeLRM_VALUETeV_jj" :
+      lg.AddEntry(gtheo,"Z^{\prime}_{LRM}","L")
+    elif signal=="p8_pp_ZprimeETA_VALUETeV_jj" :
+      lg.AddEntry(gtheo,"Z^{\prime}_{\\eta}","L")
+    elif signal=="p8_pp_ZprimeI_VALUETeV_jj" :
+      lg.AddEntry(gtheo,"Z^{\prime}_{I}","L")
+    elif signal=="p8_pp_ZprimeSSM_VALUETeV_jj" :
+      lg.AddEntry(gtheo,"Z^{\prime}_{SSM}","L")
     elif do_SSM==True :
       lg.AddEntry(gtheo,    "Z^{\prime}_{TC2}","L")
       lg.AddEntry(gtheo_SSM,"Z^{\prime}_{SSM}","L")
@@ -310,17 +325,17 @@ if __name__=="__main__":
     label.SetTextColor(1)
     label.SetTextSize(0.042)
     label.SetTextAlign(12)
-    if name.find("fcc")>=0 :
+    if ops.name.find("fcc")>=0 :
       label.DrawLatex(0.24,0.85, "FCC simulation")
       label.DrawLatex(0.24,0.79, "\sqrt{s}=100TeV")
       label.DrawLatex(0.24,0.73, "\int Ldt=30ab^{-1}")
-    elif name.find("helhc")>=0 :
+    elif ops.name.find("helhc")>=0 :
       label.DrawLatex(0.24,0.85, "HELHC simulation")
       label.DrawLatex(0.24,0.79, "\sqrt{s}=27TeV")
       label.DrawLatex(0.24,0.73, "\int Ldt=15ab^{-1}")
     else :
       print 'name does not contains fcc or helhc'
-       sys.exit(3)
+      sys.exit(3)
     label.DrawLatex(0.24,0.15, ops.plotname)
 
 
