@@ -253,6 +253,7 @@ if __name__=="__main__":
     #lg.AddEntry(gtheo,"Z^{\prime}_{SSM}","L")
     sig_found=True
     if signal.find("p8_pp_Zprime")>=0 and signal.find("_VALUETeV_jj")>=0: sig_found=False
+    if signal=="mgp8_pp_Zprime_mumu_5f_Mzp_VALUETeV": sig_found=False
     if sig_found==True :
       lg.AddEntry(gtheo,theoname,"L")
 
