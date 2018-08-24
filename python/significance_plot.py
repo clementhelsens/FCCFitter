@@ -309,7 +309,7 @@ if __name__=="__main__":
     if the_ana=='ee'            : plotname+="Z\'_{SSM} #rightarrow e^{+}e^{-}"
     if the_ana=='mumu'          : plotname+="Z\'_{SSM} #rightarrow #mu^{+}#mu^{-}"
     if the_ana=='ww'            : plotname+="RSG #rightarrow W^{+}W^{-}"
-    if the_ana=='jj'            : plotname+="G* #rightarrow jet jet"
+    if the_ana=='jj'            : plotname+="Q* #rightarrow jj"
     if the_ana=='tautau'        : plotname+="Z\'_{SSM} #rightarrow #tau^{+}#tau^{-}"
     if the_ana=='mumu_flav_ano' : plotname+="Z\' #rightarrow #mu^{+}#mu^{-} (1710.06363)"
     if the_ana=='mumu_LQ'       : plotname+="t-channel LQ #rightarrow #mu^{+}#mu^{-} (1710.06363)"
