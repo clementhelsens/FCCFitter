@@ -254,67 +254,69 @@ if __name__=="__main__":
     sig_found=True
     if signal.find("p8_pp_Zprime")>=0 and signal.find("_VALUETeV_jj")>=0: sig_found=False
     if signal=="mgp8_pp_Zprime_mumu_5f_Mzp_VALUETeV": sig_found=False
+    if signal=="p8_pp_ZprimeSSM_VALUETeV_ll": sig_found=False
     if sig_found==True :
       lg.AddEntry(gtheo,theoname,"L")
-
-    if signal=="mgp8_pp_Zprime_mumu_5f_Mzp_VALUETeV" : 
-      lg.AddEntry(gtheo,"Z^{\prime} (1710.06363)","L")
-    elif signal=="mgp8_pp_LQ_mumu_5f_MLQ_VALUETeV" :
-      lg.AddEntry(gtheo,"LQ (1710.06363)","L")
-    elif signal=="p8_pp_ZprimeCHI_VALUETeV_jj" :
-      lg.AddEntry(gtheo,"Z^{\prime}_{\\chi}","L")
-    elif signal=="p8_pp_ZprimePSI_VALUETeV_jj" :
-      lg.AddEntry(gtheo,"Z^{\prime}_{\\psi}","L")
-    elif signal=="p8_pp_ZprimeLRM_VALUETeV_jj" :
-      lg.AddEntry(gtheo,"Z^{\prime}_{LRM}","L")
-    elif signal=="p8_pp_ZprimeETA_VALUETeV_jj" :
-      lg.AddEntry(gtheo,"Z^{\prime}_{\\eta}","L")
-    elif signal=="p8_pp_ZprimeI_VALUETeV_jj" :
-      lg.AddEntry(gtheo,"Z^{\prime}_{I}","L")
-    elif signal=="p8_pp_ZprimeSSM_VALUETeV_jj" :
-      lg.AddEntry(gtheo,"Z^{\prime}_{SSM}","L")
-    elif do_SSM==True :
-      lg.AddEntry(gtheo,    "Z^{\prime}_{TC2}","L")
-      lg.AddEntry(gtheo_SSM,"Z^{\prime}_{SSM}","L")
-    elif len(models)>1 :
-        print "-----------------------------------------"
-        gtheolist={}
-        gtheocolorlist={'p8_pp_ZprimeCHI_VALUETeV_ll':4, 
-                        'p8_pp_ZprimePSI_VALUETeV_ll':5,
-                        'p8_pp_ZprimeLRM_VALUETeV_ll':6,
-                        'p8_pp_ZprimeETA_VALUETeV_ll':7,
-                        'p8_pp_ZprimeI_VALUETeV_ll':8,
-                        }
-        gtheonamelist={'p8_pp_ZprimeCHI_VALUETeV_ll':'\\chi', 
-                        'p8_pp_ZprimePSI_VALUETeV_ll':'\\psi',
-                        'p8_pp_ZprimeLRM_VALUETeV_ll':'LRM',
-                        'p8_pp_ZprimeETA_VALUETeV_ll':'\\eta',
-                        'p8_pp_ZprimeI_VALUETeV_ll':'I',
-                        }
-
-        for mod in models:
-            print 'model    ',mod
-            if mod=="":continue
-            XS=getXS(masses_nom, mod, ops.name)
-            XStheo=array('d')
-            for v in XS:
-                if "p8_pp_Zprime" in mod and "ll" in mod: XStheo.append(v/3.)
-                else:  XStheo.append(v)
-            print 'loop models nmass ',nmass
-            print 'loop models mass array ',masses_array
-            print 'loop models xs     ',XS
-            print 'loop models xstheo ',XStheo
-            
-            gtheolist[mod] = r.TGraph(nmass, masses_array, XStheo)
-            gtheolist[mod].SetLineColor(gtheocolorlist[mod])
-            gtheolist[mod].SetLineWidth(2)
-
-            gtheolist[mod].Draw("L")
-            lg.AddEntry(gtheo,"Z^{\prime}_{SSM}","L")
-            lg.AddEntry(gtheolist[mod], "Z^{\prime}_{%s}"%gtheonamelist[mod],"L")
-            #lg.AddEntry(gtheolist[mod], "Z^{'}_{%s}"%gtheonamelist[mod],"L")
     else :
-      lg.AddEntry(gtheo,"Z^{\prime}_{SSM}","L")
+      if signal=="mgp8_pp_Zprime_mumu_5f_Mzp_VALUETeV" : 
+        lg.AddEntry(gtheo,"Z^{\prime} (1710.06363)","L")
+      elif signal=="mgp8_pp_LQ_mumu_5f_MLQ_VALUETeV" :
+        lg.AddEntry(gtheo,"LQ (1710.06363)","L")
+      elif signal=="p8_pp_ZprimeCHI_VALUETeV_jj" :
+        lg.AddEntry(gtheo,"Z^{\prime}_{\\chi}","L")
+      elif signal=="p8_pp_ZprimePSI_VALUETeV_jj" :
+        lg.AddEntry(gtheo,"Z^{\prime}_{\\psi}","L")
+      elif signal=="p8_pp_ZprimeLRM_VALUETeV_jj" :
+        lg.AddEntry(gtheo,"Z^{\prime}_{LRM}","L")
+      elif signal=="p8_pp_ZprimeETA_VALUETeV_jj" :
+        lg.AddEntry(gtheo,"Z^{\prime}_{\\eta}","L")
+      elif signal=="p8_pp_ZprimeI_VALUETeV_jj" :
+        lg.AddEntry(gtheo,"Z^{\prime}_{I}","L")
+      elif signal=="p8_pp_ZprimeSSM_VALUETeV_jj" :
+        lg.AddEntry(gtheo,"Z^{\prime}_{SSM}","L")
+      elif do_SSM==True :
+        lg.AddEntry(gtheo,    "Z^{\prime}_{TC2}","L")
+        lg.AddEntry(gtheo_SSM,"Z^{\prime}_{SSM}","L")
+      elif len(models)>1 :
+          print "-----------------------------------------"
+          gtheolist={}
+          gtheocolorlist={'p8_pp_ZprimeCHI_VALUETeV_ll':4, 
+                          'p8_pp_ZprimePSI_VALUETeV_ll':5,
+                          'p8_pp_ZprimeLRM_VALUETeV_ll':6,
+                          'p8_pp_ZprimeETA_VALUETeV_ll':7,
+                          'p8_pp_ZprimeI_VALUETeV_ll':8,
+                          }
+          gtheonamelist={'p8_pp_ZprimeCHI_VALUETeV_ll':'\\chi', 
+                          'p8_pp_ZprimePSI_VALUETeV_ll':'\\psi',
+                          'p8_pp_ZprimeLRM_VALUETeV_ll':'LRM',
+                          'p8_pp_ZprimeETA_VALUETeV_ll':'\\eta',
+                          'p8_pp_ZprimeI_VALUETeV_ll':'I',
+                          }
+
+          lg.AddEntry(gtheo,"Z^{\prime}_{SSM}","L")
+          for mod in models:
+              print 'model    ',mod
+              if mod=="":continue
+              XS=getXS(masses_nom, mod, ops.name)
+              XStheo=array('d')
+              for v in XS:
+                  if "p8_pp_Zprime" in mod and "ll" in mod: XStheo.append(v/3.)
+                  else:  XStheo.append(v)
+              print 'loop models nmass ',nmass
+              print 'loop models mass array ',masses_array
+              print 'loop models xs     ',XS
+              print 'loop models xstheo ',XStheo
+              
+              gtheolist[mod] = r.TGraph(nmass, masses_array, XStheo)
+              gtheolist[mod].SetLineColor(gtheocolorlist[mod])
+              gtheolist[mod].SetLineWidth(2)
+
+              gtheolist[mod].Draw("L")
+              #lg.AddEntry(gtheo,"Z^{\prime}_{SSM}","L")
+              lg.AddEntry(gtheolist[mod], "Z^{\prime}_{%s}"%gtheonamelist[mod],"L")
+              #lg.AddEntry(gtheolist[mod], "Z^{'}_{%s}"%gtheonamelist[mod],"L")
+      else :
+        lg.AddEntry(gtheo,"Z^{\prime}_{SSM}","L")
         
     if len(masses_cms)>0: lg.AddEntry(gmed_cms, "95% CL exp. limit CMS", "L")
 
