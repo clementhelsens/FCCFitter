@@ -256,6 +256,8 @@ if __name__=="__main__":
       lg_lbl=ana
       lg_lbl=lg_lbl.replace('mumu','#mu#mu')
       lg_lbl=lg_lbl.replace('ll','#it{ll}')
+      lg_lbl=lg_lbl.replace('bb','#it{bb}')
+      lg_lbl=lg_lbl.replace('qq','#it{qq}')
       lg_lbl=lg_lbl.replace('5p','5%')
       lg_lbl=lg_lbl.replace('10p','10%')
       lg_lbl=lg_lbl.replace('15p','15%')
@@ -287,6 +289,11 @@ if __name__=="__main__":
     the_ana=''
     if 'ee' in namesList and 'mumu' in namesList and 'll' in namesList and 'tt' in namesList: the_ana='llSSM'
     if 'ee' in namesList and 'mumu' in namesList and 'll' in namesList: the_ana='llSSM'
+    # different models Z' case
+    elif 'tt'     in namesList and 'SSM' not in namesList and "TC2" not in namesList : the_ana='ttSSM'
+    elif 'bb'     in namesList                        : the_ana='bbSSM'
+    elif 'qq'     in namesList                        : the_ana='qqSSM'
+    #
     elif 'SSM'    in namesList and "TC2" in namesList : the_ana='ttTC2'
     elif 'TC2'    in namesList                        : the_ana='ttTC2'
     elif 'tt'     in namesList                        : the_ana='ttTC2'
@@ -304,6 +311,8 @@ if __name__=="__main__":
     plotname = ""
     if the_ana=='llSSM'         : plotname+="Z\'_{SSM}"
     if the_ana=='ttSSM'         : plotname+="Z\'_{SSM} #rightarrow t#bar{t}"
+    if the_ana=='bbSSM'         : plotname+="Z\'_{SSM} #rightarrow b#bar{b}"
+    if the_ana=='qqSSM'         : plotname+="Z\'_{SSM} #rightarrow q#bar{q}"
     if the_ana=='ttTC2'         : plotname+="Z\' #rightarrow t#bar{t}"
     if the_ana=='ll'            : plotname+="Z\'_{SSM} #rightarrow l^{+}l^{-}"
     if the_ana=='ee'            : plotname+="Z\'_{SSM} #rightarrow e^{+}e^{-}"

@@ -39,6 +39,38 @@ def getXS(masses, template, name):
     return XS
 
 
+#__________________________________________________________
+def getBRZjj(template, decay):
+    # mass depandancy is tyny fo rthe masses considered at HE-LHC
+    BRZjj=1.
+    #
+    if "PSI" in template and decay=="qq" : BRZjj=0.403+0.134
+    if "PSI" in template and decay=="bb" : BRZjj=0.134
+    if "PSI" in template and decay=="tt" : BRZjj=0.131
+    #
+    if "I"   in template and decay=="qq" : BRZjj=0.402+0.
+    if "I"   in template and decay=="bb" : BRZjj=0.201
+    if "I"   in template and decay=="tt" : BRZjj=0.
+    #
+    if "CHI" in template and decay=="qq" : BRZjj=0.402+0.037
+    if "CHI" in template and decay=="bb" : BRZjj=0.184
+    if "CHI" in template and decay=="tt" : BRZjj=0.035
+    #
+    if "LRM" in template and decay=="qq" : BRZjj=0.498+0.111
+    if "LRM" in template and decay=="bb" : BRZjj=0.194
+    if "LRM" in template and decay=="tt" : BRZjj=0.106
+    #
+    if "SSM" in template and decay=="qq" : BRZjj=0.381+0.108
+    if "SSM" in template and decay=="bb" : BRZjj=0.138
+    if "SSM" in template and decay=="tt" : BRZjj=0.104
+    #
+    if "ETA" in template and decay=="qq" : BRZjj=0.402+0.179
+    if "ETA" in template and decay=="bb" : BRZjj=0.111
+    if "ETA" in template and decay=="tt" : BRZjj=0.173
+    #
+    #print "getBRZjj->",template,decay,BRZjj
+    return BRZjj
+
 #______________________________________________________________________________
 def split_comma_args(args):
     new_args = []
@@ -130,6 +162,8 @@ if __name__=="__main__":
     XStheo=array('d')
     for v in XS:
         if signal=="p8_pp_ZprimeSSM_VALUETeV_ll": XStheo.append(v/3.)
+        elif "p8_pp_Zprime" in signal and (ops.plotname=="tt" or ops.plotname=="bb" or ops.plotname=="qq"): XStheo.append(v*getBRZjj(signal, ops.plotname))
+#; print "DAV->",v,getBRZjj(signal, ops.plotname),v*getBRZjj(signal, ops.plotname)
         else:  XStheo.append(v)
     nmass=len(files_nom)
 
@@ -255,6 +289,7 @@ if __name__=="__main__":
     if signal.find("p8_pp_Zprime")>=0 and signal.find("_VALUETeV_jj")>=0: sig_found=False
     if signal=="mgp8_pp_Zprime_mumu_5f_Mzp_VALUETeV": sig_found=False
     if signal=="p8_pp_ZprimeSSM_VALUETeV_ll": sig_found=False
+    if signal=="p8_pp_ZprimeSSM_VALUETeV_jj": sig_found=False
     if sig_found==True :
       lg.AddEntry(gtheo,theoname,"L")
     else :
@@ -262,35 +297,26 @@ if __name__=="__main__":
         lg.AddEntry(gtheo,"Z^{\prime} (1710.06363)","L")
       elif signal=="mgp8_pp_LQ_mumu_5f_MLQ_VALUETeV" :
         lg.AddEntry(gtheo,"LQ (1710.06363)","L")
-      elif signal=="p8_pp_ZprimeCHI_VALUETeV_jj" :
-        lg.AddEntry(gtheo,"Z^{\prime}_{\\chi}","L")
-      elif signal=="p8_pp_ZprimePSI_VALUETeV_jj" :
-        lg.AddEntry(gtheo,"Z^{\prime}_{\\psi}","L")
-      elif signal=="p8_pp_ZprimeLRM_VALUETeV_jj" :
-        lg.AddEntry(gtheo,"Z^{\prime}_{LRM}","L")
-      elif signal=="p8_pp_ZprimeETA_VALUETeV_jj" :
-        lg.AddEntry(gtheo,"Z^{\prime}_{\\eta}","L")
-      elif signal=="p8_pp_ZprimeI_VALUETeV_jj" :
-        lg.AddEntry(gtheo,"Z^{\prime}_{I}","L")
-      elif signal=="p8_pp_ZprimeSSM_VALUETeV_jj" :
-        lg.AddEntry(gtheo,"Z^{\prime}_{SSM}","L")
       elif do_SSM==True :
         lg.AddEntry(gtheo,    "Z^{\prime}_{TC2}","L")
         lg.AddEntry(gtheo_SSM,"Z^{\prime}_{SSM}","L")
       elif len(models)>1 :
           print "-----------------------------------------"
           gtheolist={}
-          gtheocolorlist={'p8_pp_ZprimeCHI_VALUETeV_ll':4, 
-                          'p8_pp_ZprimePSI_VALUETeV_ll':5,
-                          'p8_pp_ZprimeLRM_VALUETeV_ll':6,
-                          'p8_pp_ZprimeETA_VALUETeV_ll':7,
-                          'p8_pp_ZprimeI_VALUETeV_ll':8,
+          extra = 'll'
+          if signal=="p8_pp_ZprimeSSM_VALUETeV_jj": extra = 'jj'
+          #
+          gtheocolorlist={'p8_pp_ZprimeCHI_VALUETeV_'+extra:4, 
+                          'p8_pp_ZprimePSI_VALUETeV_'+extra:5,
+                          'p8_pp_ZprimeLRM_VALUETeV_'+extra:6,
+                          'p8_pp_ZprimeETA_VALUETeV_'+extra:7,
+                          'p8_pp_ZprimeI_VALUETeV_'+extra:8,
                           }
-          gtheonamelist={'p8_pp_ZprimeCHI_VALUETeV_ll':'\\chi', 
-                          'p8_pp_ZprimePSI_VALUETeV_ll':'\\psi',
-                          'p8_pp_ZprimeLRM_VALUETeV_ll':'LRM',
-                          'p8_pp_ZprimeETA_VALUETeV_ll':'\\eta',
-                          'p8_pp_ZprimeI_VALUETeV_ll':'I',
+          gtheonamelist={ 'p8_pp_ZprimeCHI_VALUETeV_'+extra:'\\chi', 
+                          'p8_pp_ZprimePSI_VALUETeV_'+extra:'\\psi',
+                          'p8_pp_ZprimeLRM_VALUETeV_'+extra:'LRM',
+                          'p8_pp_ZprimeETA_VALUETeV_'+extra:'\\eta',
+                          'p8_pp_ZprimeI_VALUETeV_'+extra:'I',
                           }
 
           lg.AddEntry(gtheo,"Z^{\prime}_{SSM}","L")
@@ -301,6 +327,7 @@ if __name__=="__main__":
               XStheo=array('d')
               for v in XS:
                   if "p8_pp_Zprime" in mod and "ll" in mod: XStheo.append(v/3.)
+                  elif "p8_pp_Zprime" in mod and (ops.plotname=="tt" or ops.plotname=="bb" or ops.plotname=="qq"): XStheo.append(v*getBRZjj(mod, ops.plotname))
                   else:  XStheo.append(v)
               print 'loop models nmass ',nmass
               print 'loop models mass array ',masses_array
@@ -315,6 +342,18 @@ if __name__=="__main__":
               #lg.AddEntry(gtheo,"Z^{\prime}_{SSM}","L")
               lg.AddEntry(gtheolist[mod], "Z^{\prime}_{%s}"%gtheonamelist[mod],"L")
               #lg.AddEntry(gtheolist[mod], "Z^{'}_{%s}"%gtheonamelist[mod],"L")
+      elif signal=="p8_pp_ZprimeCHI_VALUETeV_jj" :
+        lg.AddEntry(gtheo,"Z^{\prime}_{\\chi}","L")
+      elif signal=="p8_pp_ZprimePSI_VALUETeV_jj" :
+        lg.AddEntry(gtheo,"Z^{\prime}_{\\psi}","L")
+      elif signal=="p8_pp_ZprimeLRM_VALUETeV_jj" :
+        lg.AddEntry(gtheo,"Z^{\prime}_{LRM}","L")
+      elif signal=="p8_pp_ZprimeETA_VALUETeV_jj" :
+        lg.AddEntry(gtheo,"Z^{\prime}_{\\eta}","L")
+      elif signal=="p8_pp_ZprimeI_VALUETeV_jj" :
+        lg.AddEntry(gtheo,"Z^{\prime}_{I}","L")
+      elif signal=="p8_pp_ZprimeSSM_VALUETeV_jj" :
+        lg.AddEntry(gtheo,"Z^{\prime}_{SSM}","L")
       else :
         lg.AddEntry(gtheo,"Z^{\prime}_{SSM}","L")
         
