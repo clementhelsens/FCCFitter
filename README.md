@@ -1,24 +1,15 @@
-Build status
----------
-.. image:: https://gitlab.cern.ch/TRExStats/TRExFitter/badges/master/build.svg 
-   :target: https://gitlab.cern.ch/TRExStats/TRExFitter/commits/master
-
-
 Getting the code
 ---------
 To get the code, use the following command::
 
-  git clone ssh://git@gitlab.cern.ch:7999/TRExStats/TRExFitter.git
+  git clone git@github.com:FCC-hh-framework/FCCFitter.git
 
-To get a specific tag, do the following::
-
-  cd TRExFitter && git checkout <tag number> && cd -
 
 Setup
 ---------
 To setup just use the script::
 
-  source setup.sh
+  source setupFCC.sh
 
 (should work on any machine with access to afs - provided that nothing else is set-up previously)
 
