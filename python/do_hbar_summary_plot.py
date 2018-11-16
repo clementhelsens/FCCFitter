@@ -1,30 +1,30 @@
 import ROOT as r
 
-only_100=True
-#only_100=False
+#only_100=True
+only_100=False
 
 rsgww      = ["RSG #rightarrow W^{+}W^{-}",
-              [5.,7.,11.],  #  27 TeV ->   1, 15, 100 ab-1
-              [15.,22.,34.]] # 100 TeV -> 2.5, 30, 100 ab-1
+              [5.,7.,8.],  #  27 TeV ->   1, 15, 100 ab-1
+              [15.,22.,26.]] # 100 TeV -> 2.5, 30, 100 ab-1
 qstar      = ["Q* #rightarrow jj",
-              [10.,12.,16.],
-              [36.,40.,50.]]
+              [10.,12.,14.],
+              [36.,40.,43.]]
 zpttTC2    = ["Z\'_{TC2} #rightarrow t#bar{t}",
-              [6.,8.,18.],
-              [16.,23.,33.]]
+              [6.,8.,10.],
+              [16.,23.,27.]]
 zpttSSM    = ["Z\'_{SSM} #rightarrow t#bar{t}",
-              [4.,6.,18.],
-              [10.,18.,29.]]
+              [4.,6.,8.],
+              [10.,18.,22.]]
 zpll       = ["Z\'_{SSM} #rightarrow l^{+}l^{-}",
-              [10.,13.,17.],
-              [33.,43.,55.]]
+              [10.,13.,15.],
+              [33.,43.,47.]]
 zptautau   = ["Z\'_{SSM} #rightarrow #tau^{+}#tau^{-}",
-              [3.,6.,10.],
-              [12.,18.,29.]]
+              [3.,6.,9.],
+              [12.,18.,23.]]
 # f.a. = 1710.06363
 zpmumuflav = ["Z\'_{f.a.} #rightarrow #mu^{+}#mu^{-}",
-              [0.1,2.,8.],
-              [10.,19.,34.]]
+              [0.1,2.,5.],
+              [10.,19.,23.]]
 
 database=[
 zptautau,
@@ -71,8 +71,8 @@ for i_bin in xrange( 1, nbins+1 ):
       h_100[i].SetBinContent(i_bin, val100[count_ana][i])
   #
   if only_100==False :
-    str_27   = '#scale[0.75]{27 TeV}'
-    str_100  = '#scale[0.75]{100 TeV}'
+    str_27   = '#scale[0.75]{#sqrt{s} = 27 TeV}'
+    str_100  = '#scale[0.75]{#sqrt{s} = 100 TeV}'
     if count==1 : h_100[nMax].GetXaxis().SetBinLabel(i_bin,str_27)
     if count==2 : h_100[nMax].GetXaxis().SetBinLabel(i_bin,str_100)
     if count==3 :
@@ -91,12 +91,12 @@ for i in xrange( 0, nMax+1 ) :
   if i==0: alpha=0.8
   if i==nMax: alpha=0.15
   #
-  h_27[i].SetFillColor(color[i][0])
-  h_27[i].SetLineColor(color[i][0])
+  h_27[i].SetLineColorAlpha(color[i][0],0.)
   h_27[i].SetFillColorAlpha(color[i][0],alpha)
-  h_100[i].SetFillColor(color[i][1])
-  h_100[i].SetLineColor(color[i][1])
+  h_27[i].SetMarkerColorAlpha(color[i][0],0.)
+  h_100[i].SetLineColorAlpha(color[i][1],0.)
   h_100[i].SetFillColorAlpha(color[i][1],alpha)
+  h_100[i].SetMarkerColorAlpha(color[i][0],0.)
 
 canvas = r.TCanvas("test", "test", 600, 600)
 canvas.SetTicks(1,1)
@@ -119,6 +119,7 @@ h_100[nMax].SetTitle("")
 h_100[nMax].GetYaxis().SetTitleOffset(1.30)
 h_100[nMax].GetYaxis().SetTitle("Mass scale [TeV]")
 h_100[nMax].GetXaxis().SetLabelSize(0.05)
+h_100[nMax].GetXaxis().SetTickLength(0.)
 
 h_100[nMax].Draw("hbar")
 for i in xrange( nMax, -1, -1 ) :
@@ -137,7 +138,15 @@ Text.SetTextSize(0.033)
 text = '5 #sigma Discovery'
 Text.DrawLatex(0.95, 0.72, text)
 
+leftText   = "FCC-hh Simulation (Delphes), #sqrt{s} = 100 TeV"
+leftText2  = "FCC-hh / HE-LHC Simulation (Delphes)"
+Text.SetTextAlign(31);
+Text.SetTextSize(0.04)
+if only_100==True : Text.DrawLatex(0.97, 0.92, '#it{' + leftText  +'}')
+else :              Text.DrawLatex(0.97, 0.92, '#it{' + leftText2 +'}')
+
 canvas.RedrawAxis()
+canvas.RedrawAxis("g");
 canvas.GetFrame().SetBorderSize( 12 )
 canvas.Modified()
 canvas.Update()
