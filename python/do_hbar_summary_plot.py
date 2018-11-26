@@ -1,9 +1,11 @@
 import ROOT as r
 
-#only_100=True
-only_100=False
+mode="27"
+#mode="100"
+#mode="27_100"
 
-rsgww      = ["RSG #rightarrow W^{+}W^{-}",
+#rsgww      = ["RSG #rightarrow W^{+}W^{-}",
+rsgww      = ["G_{RS} #rightarrow W^{+}W^{-}",
               [5.,7.,8.],  #  27 TeV ->   1, 15, 100 ab-1
               [15.,22.,26.]] # 100 TeV -> 2.5, 30, 100 ab-1
 qstar      = ["Q* #rightarrow jj",
@@ -38,7 +40,7 @@ qstar,
 
 nAna=6
 nbins = (3*nAna)
-if only_100==True : nbins = (2*nAna)
+if mode=="27" or mode=="100": nbins = (2*nAna)
 h_27=[]
 h_27.append( r.TH1D("h_27_1", "h_27_1", nbins,0.,nbins))
 h_27.append( r.TH1D("h_27_2", "h_27_2", nbins,0.,nbins))
@@ -62,15 +64,19 @@ count_ana = 0
 for i_bin in xrange( 1, nbins+1 ):
   if count==4 : count=1
   if count==1 :
-    if only_100==False :
+    if mode=="27" :
       for i in xrange( 0, nMax+1 ) : h_27[i].SetBinContent(i_bin, val27[count_ana][i])
-    else :
       count+=1
+    elif mode=="100" :
+      for i in xrange( 0, nMax+1 ) : h_100[i].SetBinContent(i_bin, val100[count_ana][i])
+      count+=1
+    else :
+      for i in xrange( 0, nMax+1 ) : h_27[i].SetBinContent(i_bin, val27[count_ana][i])
   if count==2 :
     for i in xrange( 0, nMax+1 ) :
       h_100[i].SetBinContent(i_bin, val100[count_ana][i])
   #
-  if only_100==False :
+  if mode=="27_100" :
     str_27   = '#scale[0.75]{#sqrt{s} = 27 TeV}'
     str_100  = '#scale[0.75]{#sqrt{s} = 100 TeV}'
     if count==1 : h_100[nMax].GetXaxis().SetBinLabel(i_bin,str_27)
@@ -82,7 +88,8 @@ for i_bin in xrange( 1, nbins+1 ):
   else :
     if count==2 :
       str_proc = '#scale[1.02]{#font[22]{'+process[count_ana]+'}}'
-      h_100[nMax].GetXaxis().SetBinLabel(i_bin,str_proc)
+      if mode=="27"  : h_27[nMax].GetXaxis().SetBinLabel(i_bin,str_proc)
+      if mode=="100" : h_100[nMax].GetXaxis().SetBinLabel(i_bin,str_proc)
       count_ana+=1
   count+=1
 
@@ -113,23 +120,41 @@ leg.SetShadowColor(10)
 leg.SetTextSize(0.035)
 leg.SetTextFont(42)
 
-the_max=h_100[nMax].GetMaximum()
-h_100[nMax].SetMaximum(the_max*1.1)
-h_100[nMax].SetTitle("")
-h_100[nMax].GetYaxis().SetTitleOffset(1.30)
-h_100[nMax].GetYaxis().SetTitle("Mass scale [TeV]")
-h_100[nMax].GetXaxis().SetLabelSize(0.05)
-h_100[nMax].GetXaxis().SetTickLength(0.)
+if mode=="27" :
+  the_max=h_27[nMax].GetMaximum()
+  h_27[nMax].SetMaximum(the_max*1.1)
+  h_27[nMax].SetTitle("")
+  h_27[nMax].GetYaxis().SetTitleOffset(1.30)
+  h_27[nMax].GetYaxis().SetTitle("Mass scale [TeV]")
+  h_27[nMax].GetXaxis().SetLabelSize(0.05)
+  h_27[nMax].GetXaxis().SetTickLength(0.)
 
-h_100[nMax].Draw("hbar")
-for i in xrange( nMax, -1, -1 ) :
-  h_100[i].Draw("hbarsame")
-  if only_100==False : h_27[i].Draw("hbarsame")
+  h_27[nMax].Draw("hbar")
+  for i in xrange( nMax, -1, -1 ) :
+    h_27[i].Draw("hbarsame")
 
-for i in xrange( 0, nMax+1 ) :
-  if only_100==False and i!=nMax : leg.AddEntry(h_27[i],legend[i][0])
-  leg.AddEntry(h_100[i],legend[i][1])
-leg.Draw("same")
+  for i in xrange( 0, nMax+1 ) :
+    leg.AddEntry(h_27[i],legend[i][0])
+  leg.Draw("same")
+
+else :
+  the_max=h_100[nMax].GetMaximum()
+  h_100[nMax].SetMaximum(the_max*1.1)
+  h_100[nMax].SetTitle("")
+  h_100[nMax].GetYaxis().SetTitleOffset(1.30)
+  h_100[nMax].GetYaxis().SetTitle("Mass scale [TeV]")
+  h_100[nMax].GetXaxis().SetLabelSize(0.05)
+  h_100[nMax].GetXaxis().SetTickLength(0.)
+  
+  h_100[nMax].Draw("hbar")
+  for i in xrange( nMax, -1, -1 ) :
+    h_100[i].Draw("hbarsame")
+    if mode=="27_100" : h_27[i].Draw("hbarsame")
+  
+  for i in xrange( 0, nMax+1 ) :
+    if mode=="27_100" and i!=nMax : leg.AddEntry(h_27[i],legend[i][0])
+    leg.AddEntry(h_100[i],legend[i][1])
+  leg.Draw("same")
 
 Text = r.TLatex()
 Text.SetNDC()
@@ -138,12 +163,14 @@ Text.SetTextSize(0.033)
 text = '5 #sigma Discovery'
 Text.DrawLatex(0.95, 0.72, text)
 
-leftText   = "FCC-hh Simulation (Delphes), #sqrt{s} = 100 TeV"
-leftText2  = "FCC-hh / HE-LHC Simulation (Delphes)"
+leftText27      = "HE-LHC Simulation (Delphes), #sqrt{s} = 27 TeV"
+leftText100     = "FCC-hh Simulation (Delphes), #sqrt{s} = 100 TeV"
+leftText27_100  = "FCC-hh / HE-LHC Simulation (Delphes)"
 Text.SetTextAlign(31);
 Text.SetTextSize(0.04)
-if only_100==True : Text.DrawLatex(0.97, 0.92, '#it{' + leftText  +'}')
-else :              Text.DrawLatex(0.97, 0.92, '#it{' + leftText2 +'}')
+if mode=="27"    : Text.DrawLatex(0.97, 0.92, '#it{' + leftText27     +'}')
+elif mode=="100" : Text.DrawLatex(0.97, 0.92, '#it{' + leftText100    +'}')
+else             : Text.DrawLatex(0.97, 0.92, '#it{' + leftText27_100 +'}')
 
 canvas.RedrawAxis()
 canvas.RedrawAxis("g");
@@ -152,6 +179,7 @@ canvas.Modified()
 canvas.Update()
 
 extra=""
-if only_100==True : extra="_onlyFCChh"
+if mode=="27"  : extra="_onlyHELHC"
+if mode=="100" : extra="_onlyFCChh"
 canvas.Print("summaryDisco"+extra+".pdf")
 
