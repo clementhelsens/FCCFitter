@@ -294,7 +294,7 @@ if __name__=="__main__":
     elif 'bb'     in namesList                        : the_ana='bbSSM'
     elif 'qq'     in namesList                        : the_ana='qqSSM'
     #
-    elif 'SSM'    in namesList and "TC2" in namesList : the_ana='ttTC2'
+    elif 'SSM'    in namesList and "TC2" in namesList : the_ana='ttTC2SSM'
     elif 'TC2'    in namesList                        : the_ana='ttTC2'
     elif 'tt'     in namesList                        : the_ana='ttTC2'
     elif 'SSM'    in namesList                        : the_ana='ttSSM'
@@ -313,11 +313,12 @@ if __name__=="__main__":
     if the_ana=='ttSSM'         : plotname+="Z\'_{SSM} #rightarrow t#bar{t}"
     if the_ana=='bbSSM'         : plotname+="Z\'_{SSM} #rightarrow b#bar{b}"
     if the_ana=='qqSSM'         : plotname+="Z\'_{SSM} #rightarrow q#bar{q}"
-    if the_ana=='ttTC2'         : plotname+="Z\' #rightarrow t#bar{t}"
+    if the_ana=='ttTC2SSM'      : plotname+="Z\' #rightarrow t#bar{t}"
+    if the_ana=='ttTC2'         : plotname+="Z\'_{TC2} #rightarrow t#bar{t}"
     if the_ana=='ll'            : plotname+="Z\'_{SSM} #rightarrow l^{+}l^{-}"
     if the_ana=='ee'            : plotname+="Z\'_{SSM} #rightarrow e^{+}e^{-}"
     if the_ana=='mumu'          : plotname+="Z\'_{SSM} #rightarrow #mu^{+}#mu^{-}"
-    if the_ana=='ww'            : plotname+="RSG #rightarrow W^{+}W^{-}"
+    if the_ana=='ww'            : plotname+="G_{RS} #rightarrow W^{+}W^{-}"
     if the_ana=='jj'            : plotname+="Q* #rightarrow jj"
     if the_ana=='tautau'        : plotname+="Z\'_{SSM} #rightarrow #tau^{+}#tau^{-}"
     if the_ana=='mumu_flav_ano' : plotname+="Z\' #rightarrow #mu^{+}#mu^{-} (1710.06363)"
@@ -363,16 +364,32 @@ if __name__=="__main__":
     label.SetTextSize(0.042)
     label.SetTextAlign(12)
     if ops.helhc:
-      label.DrawLatex(the_pos,0.85, "HELHC simulation")
-      label.DrawLatex(the_pos,0.79, "\sqrt{s}=27TeV")
+      label.SetNDC()
+      label.SetTextAlign(31);
+      label.SetTextSize(0.04)
+      label.DrawLatex(0.90,0.92, "#it{HE-LHC Simulation (Delphes)}")
+
+      label.SetTextAlign(12);
+      label.SetNDC(r.kTRUE)
+      label.SetTextSize(0.04)
+      label.DrawLatex(0.18,0.83, "#bf{#it{#sqrt{s} = 27 TeV}}")
+
     else:
-      label.DrawLatex(the_pos,0.85, "FCC simulation")
-      label.DrawLatex(the_pos,0.79, "\sqrt{s}=100TeV")
+      label.SetNDC()
+      label.SetTextAlign(31);
+      label.SetTextSize(0.04)
+      label.DrawLatex(0.90,0.92, "#it{FCC-hh Simulation (Delphes)}")
+
+      label.SetTextAlign(12);
+      label.SetNDC(r.kTRUE)
+      label.SetTextSize(0.04)
+      label.DrawLatex(0.18,0.83, "#bf{#it{#sqrt{s} = 100 TeV}}")
+
     label.SetTextSize(0.03)
     label.DrawLatex(0.2,0.14, "Integrated luminosity versus mass for a 5 #sigma discovery")
     label.SetTextSize(0.036)
-    if the_pos==left_pos : label.DrawLatex(the_pos,0.73, plotname)
-    else                 : label.DrawLatex(the_pos+0.3,0.79, plotname)
+    if the_pos==left_pos : label.DrawLatex(the_pos,0.78, plotname)
+    else                 : label.DrawLatex(the_pos+0.3,0.83, plotname)
 
     label.SetTextSize(0.03)
     label.SetNDC(False)
