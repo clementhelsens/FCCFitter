@@ -88,6 +88,10 @@ if __name__=="__main__":
     parser.add_option('-n', '--name', dest='name', type=str, default='')
     parser.add_option('-p', '--plotname', dest='plotname', type=str, default='')
     parser.add_option('-c', '--file_cms', dest='files_cms', type=str, default='')
+    parser.add_option('--smeart2', dest='files_smeart2', type=str, default='')
+    parser.add_option('--smeart3', dest='files_smeart3', type=str, default='')
+    parser.add_option('--smeart4', dest='files_smeart4', type=str, default='')
+    parser.add_option('--smeart5', dest='files_smeart5', type=str, default='')
     parser.add_option('-s', '--signal', dest='signal', type=str, default='')
     parser.add_option('-m', '--models', dest='models', type=str, default='')
 
@@ -109,16 +113,35 @@ if __name__=="__main__":
         files_cms=glob.glob(ops.files_cms)
         masses_cms=getMasses(files_cms)
 
+    files_smeart2=[]
+    masses_smeart2=[]
+    if ops.files_smeart2!='': 
+        files_smeart2=glob.glob(ops.files_smeart2)
+        masses_smeart2=getMasses(files_smeart2)
+
+    files_smeart3=[]
+    masses_smeart3=[]
+    if ops.files_smeart3!='': 
+        files_smeart3=glob.glob(ops.files_smeart3)
+        masses_smeart3=getMasses(files_smeart3)
+
+    files_smeart4=[]
+    masses_smeart4=[]
+    if ops.files_smeart4!='': 
+        files_smeart4=glob.glob(ops.files_smeart4)
+        masses_smeart4=getMasses(files_smeart4)
+
+    files_smeart5=[]
+    masses_smeart5=[]
+    if ops.files_smeart5!='': 
+        files_smeart5=glob.glob(ops.files_smeart5)
+        masses_smeart5=getMasses(files_smeart5)
+
+
     signal = ops.signal
     print 'NOM=============================================='
     print masses_nom
     print files_nom
-    print '=============================================='
-
-
-    print 'CMS=============================================='
-    print masses_cms
-    print files_cms
     print '=============================================='
 
     models =  ops.models
@@ -131,10 +154,28 @@ if __name__=="__main__":
         print 'different length for cms, exit'
         sys.exit(2)
 
+    if len(masses_smeart2)!=len(files_smeart2):
+        print 'different length for smeart2, exit'
+        sys.exit(2)
 
+    if len(masses_smeart3)!=len(files_smeart3):
+        print 'different length for smeart2, exit'
+        sys.exit(2)
+
+    if len(masses_smeart4)!=len(files_smeart4):
+        print 'different length for smeart2, exit'
+        sys.exit(2)
+
+    if len(masses_smeart5)!=len(files_smeart5):
+        print 'different length for smeart2, exit'
+        sys.exit(2)
 
     if len(masses_nom)>0:masses_nom, files_nom = (list(t) for t in zip(*sorted(zip(masses_nom, files_nom))))
     if len(masses_cms)>0: masses_cms, files_cms = (list(t) for t in zip(*sorted(zip(masses_cms, files_cms))))
+    if len(masses_smeart2)>0: masses_smeart2, files_smeart2 = (list(t) for t in zip(*sorted(zip(masses_smeart2, files_smeart2))))
+    if len(masses_smeart3)>0: masses_smeart3, files_smeart3 = (list(t) for t in zip(*sorted(zip(masses_smeart3, files_smeart3))))
+    if len(masses_smeart4)>0: masses_smeart4, files_smeart4 = (list(t) for t in zip(*sorted(zip(masses_smeart4, files_smeart4))))
+    if len(masses_smeart5)>0: masses_smeart5, files_smeart5 = (list(t) for t in zip(*sorted(zip(masses_smeart5, files_smeart5))))
 
 
     # dav hack
@@ -269,6 +310,94 @@ if __name__=="__main__":
         gmed_cms.Draw("L")
 
 
+#################################################
+######smeart2
+#################################################
+    XS=getXS(masses_smeart2, signal, ops.name)
+    if len(masses_smeart2)>0:
+        nmass=len(files_smeart2)
+
+        ExpMed = array( 'd' )
+        masses_array = array( 'd' )
+        for i in xrange(nmass):
+            rfile = r.TFile.Open(files_smeart2[i])
+            histo=rfile.Get('limit')
+            ExpMed.append(histo.GetBinContent(2)*XS[i])
+            masses_array.append(masses_nom[i])
+
+        gmed_smeart2  = r.TGraph(nmass, masses_array, ExpMed)
+        gmed_smeart2.SetName("exp_median")
+        gmed_smeart2.SetLineColor(1)
+        gmed_smeart2.SetLineStyle(3)
+        gmed_smeart2.SetLineWidth(3)
+        gmed_smeart2.Draw("L")
+
+#################################################
+######smeart3
+#################################################
+    XS=getXS(masses_smeart3, signal, ops.name)
+    if len(masses_smeart3)>0:
+        nmass=len(files_smeart3)
+
+        ExpMed = array( 'd' )
+        masses_array = array( 'd' )
+        for i in xrange(nmass):
+            rfile = r.TFile.Open(files_smeart3[i])
+            histo=rfile.Get('limit')
+            ExpMed.append(histo.GetBinContent(2)*XS[i])
+            masses_array.append(masses_nom[i])
+
+        gmed_smeart3  = r.TGraph(nmass, masses_array, ExpMed)
+        gmed_smeart3.SetName("exp_median")
+        gmed_smeart3.SetLineColor(1)
+        gmed_smeart3.SetLineStyle(3)
+        gmed_smeart3.SetLineWidth(3)
+        gmed_smeart3.Draw("L")
+
+#################################################
+######smeart4
+#################################################
+    XS=getXS(masses_smeart4, signal, ops.name)
+    if len(masses_smeart4)>0:
+        nmass=len(files_smeart4)
+
+        ExpMed = array( 'd' )
+        masses_array = array( 'd' )
+        for i in xrange(nmass):
+            rfile = r.TFile.Open(files_smeart4[i])
+            histo=rfile.Get('limit')
+            ExpMed.append(histo.GetBinContent(2)*XS[i])
+            masses_array.append(masses_nom[i])
+
+        gmed_smeart4  = r.TGraph(nmass, masses_array, ExpMed)
+        gmed_smeart4.SetName("exp_median")
+        gmed_smeart4.SetLineColor(1)
+        gmed_smeart4.SetLineStyle(3)
+        gmed_smeart4.SetLineWidth(3)
+        gmed_smeart4.Draw("L")
+
+#################################################
+######smeart5
+#################################################
+    XS=getXS(masses_smeart5, signal, ops.name)
+    if len(masses_smeart5)>0:
+        nmass=len(files_smeart5)
+
+        ExpMed = array( 'd' )
+        masses_array = array( 'd' )
+        for i in xrange(nmass):
+            rfile = r.TFile.Open(files_smeart5[i])
+            histo=rfile.Get('limit')
+            ExpMed.append(histo.GetBinContent(2)*XS[i])
+            masses_array.append(masses_nom[i])
+
+        gmed_smeart5  = r.TGraph(nmass, masses_array, ExpMed)
+        gmed_smeart5.SetName("exp_median")
+        gmed_smeart5.SetLineColor(1)
+        gmed_smeart5.SetLineStyle(3)
+        gmed_smeart5.SetLineWidth(3)
+        gmed_smeart5.Draw("L")
+
     lg = None
     if len(models)>1 : lg = r.TLegend(0.58,0.5,0.90,0.88)
     else:lg = r.TLegend(0.58,0.65,0.90,0.88)
@@ -281,7 +410,7 @@ if __name__=="__main__":
     lg.SetTextFont(42)
 
 
-    lg.AddEntry(gmed, "Median expected.", "L")
+    lg.AddEntry(gmed, "Median expected", "L")
     lg.AddEntry(g1s,"95% expected","F")
     lg.AddEntry(g2s,"68% expected","F")
     #lg.AddEntry(gtheo,"Z^{\prime}_{SSM}","L")
@@ -358,6 +487,10 @@ if __name__=="__main__":
         lg.AddEntry(gtheo,"Z^{\prime}_{SSM}","L")
         
     if len(masses_cms)>0: lg.AddEntry(gmed_cms, "95% CL exp. limit CMS", "L")
+    if len(masses_smeart2)>0: lg.AddEntry(gmed_smeart2, "reso x2", "L")
+    if len(masses_smeart3)>0: lg.AddEntry(gmed_smeart3, "reso x3", "L")
+    if len(masses_smeart4)>0: lg.AddEntry(gmed_smeart4, "reso x4", "L")
+    if len(masses_smeart5)>0: lg.AddEntry(gmed_smeart5, "reso x5", "L")
 
     lg.Draw()
 
