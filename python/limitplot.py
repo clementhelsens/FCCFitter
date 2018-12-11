@@ -236,11 +236,28 @@ if __name__=="__main__":
     theoname = "Z^{\prime}_{SSM}"
 
     if ops.name.find("ww")>=0 : 
-        proc = '#sigma(pp #rightarrow RSG)*BR [pb]'
-        theoname = 'RSG Pythia8 LO'
+        proc = '#sigma(pp #rightarrow G_{RS})*BR [pb]'
+        theoname = 'G_{RS} Pythia8 LO'
     if ops.name.find("jj")>=0 : 
         proc = '#sigma(pp #rightarrow Q*)*BR [pb]'
         theoname = 'Q* Pythia8 LO'
+    if ops.name.find("LQ")>=0 :
+        proc = '#sigma(pp #rightarrow LQ)*BR [pb]'
+
+    # style requests for Yellow Report
+    for_YR=True
+    #for_YR=False
+    if for_YR==True : 
+      if ops.name.find("ww")>=0 :
+        proc = '#sigma(pp #rightarrow G_{RS}/G*_{RS} #rightarrow WW) [pb]'
+      if ops.name.find("jj")>=0 :
+        proc = '#sigma(pp #rightarrow Q\'/Q\'* #rightarrow jj) [pb]'
+      if ops.name.find("tt")>=0 :
+        proc = '#sigma(pp #rightarrow Z\'/Z\'* #rightarrow tt) [pb]'
+      if ops.name.find("ll")>=0 :
+        proc = '#sigma(pp #rightarrow Z\'/Z\'* #rightarrow ll (l=e,#mu)) [pb]'
+      if ops.name.find("tautau")>=0 :
+        proc = '#sigma(pp #rightarrow Z\'/Z\'* #rightarrow #tau#tau) [pb]'
 
     gmed.SetName("exp_median")
     gmed.SetLineColor(1)
@@ -419,6 +436,8 @@ if __name__=="__main__":
     if signal=="mgp8_pp_Zprime_mumu_5f_Mzp_VALUETeV": sig_found=False
     if signal=="p8_pp_ZprimeSSM_VALUETeV_ll": sig_found=False
     if signal=="p8_pp_ZprimeSSM_VALUETeV_jj": sig_found=False
+    if signal=="mgp8_pp_LQ_mumu_5f_MLQ_VALUETeV": sig_found=False
+    if do_SSM==True: sig_found=False
     if sig_found==True :
       lg.AddEntry(gtheo,theoname,"L")
     else :
@@ -500,14 +519,35 @@ if __name__=="__main__":
     label.SetTextColor(1)
     label.SetTextSize(0.042)
     label.SetTextAlign(12)
+
     if ops.name.find("fcc")>=0 :
-      label.DrawLatex(0.24,0.85, "FCC simulation")
-      label.DrawLatex(0.24,0.79, "\sqrt{s}=100TeV")
-      label.DrawLatex(0.24,0.73, "\int Ldt=30ab^{-1}")
+      label.SetNDC()
+      label.SetTextAlign(31);
+      label.SetTextSize(0.04)
+      label.DrawLatex(0.90,0.92, "#it{FCC-hh Simulation (Delphes)}")
+
+      label.SetTextAlign(12);
+      label.SetNDC(r.kTRUE)
+      label.SetTextSize(0.04)
+      label.DrawLatex(0.18,0.83, "#bf{#it{#sqrt{s} = 100 TeV}}")
+
+      label.SetTextSize(0.035)
+      label.DrawLatex(0.18,0.78, "#bf{#it{   L = 30 ab^{-1}}}")
+
     elif ops.name.find("helhc")>=0 :
-      label.DrawLatex(0.24,0.85, "HELHC simulation")
-      label.DrawLatex(0.24,0.79, "\sqrt{s}=27TeV")
-      label.DrawLatex(0.24,0.73, "\int Ldt=15ab^{-1}")
+      label.SetNDC()
+      label.SetTextAlign(31);
+      label.SetTextSize(0.04)
+      label.DrawLatex(0.90,0.92, "#it{HE-LHC Simulation (Delphes)}")
+
+      label.SetTextAlign(12);
+      label.SetNDC(r.kTRUE)
+      label.SetTextSize(0.04)
+      label.DrawLatex(0.18,0.83, "#bf{#it{#sqrt{s} = 27 TeV}}")
+
+      label.SetTextSize(0.035)
+      label.DrawLatex(0.18,0.78, "#bf{#it{   L = 15 ab^{-1}}}")
+
     else :
       print 'name does not contains fcc or helhc'
       sys.exit(3)
