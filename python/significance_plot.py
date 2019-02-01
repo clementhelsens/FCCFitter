@@ -10,7 +10,7 @@ from ROOT import *
 from array import array
 plotname=''
 #__________________________________________________________
-def getMassDisco(signiDict):
+def getMassDisco(signiDict,mmin,mmax):
     
     indict=None
     with open(signiDict,'r') as f:
@@ -20,6 +20,12 @@ def getMassDisco(signiDict):
     disco = []
 
     for m in indict:
+        if int(m)<mmin :
+            print 'm, mmin   ',m,'  ',mmin,'   ',m>mmin
+            continue
+        if  int(m)>mmax:
+            print 'm, mmax   ',m,'   ',mmax,'   ',m>mmax, type(m), type(mmax)
+            continue
         signi=[]
         lumi=[]
         print m
@@ -60,6 +66,8 @@ def getMassDisco(signiDict):
         plt.close()
 
         mass.append(int(m))
+        #CLEMENT
+        #disco.append(discolumi/1000)
         disco.append(discolumi)
 
     Mass,Disco = zip(*sorted(zip(mass, disco)))
@@ -75,10 +83,14 @@ if __name__=="__main__":
     parser.add_option('-n', '--names', dest='names', type=str, default='')
     parser.add_option('-p', '--plot', dest='plot', type=str, default='')
     parser.add_option('--helhc',  action='store_true')
+    parser.add_option('--mmax', dest='mmax', type=int, default=1000)
+    parser.add_option('--mmin', dest='mmin', type=int, default=-1000)
 
     ops, args = parser.parse_args()
     signiDict=ops.files
     names=ops.names
+    mmax=ops.mmax
+    mmin=ops.mmin
 
     if not os.path.isdir("Plots/"):
         os.system('mkdir Plots')
@@ -98,7 +110,7 @@ if __name__=="__main__":
         plotname=namesList[s]
 
         print signiList[s]
-        Disco,Mass=getMassDisco(signiList[s])
+        Disco,Mass=getMassDisco(signiList[s],mmin,mmax)
         Disco=[i/1000. for i in Disco]
         from scipy import interpolate
         f = interpolate.interp1d(Mass, Disco)
@@ -173,19 +185,23 @@ if __name__=="__main__":
     ########################
     # ROOT style
     canvas = r.TCanvas("Discovery","Discovery",0,0,600,600)
+    #CLEMENT
     canvas.SetLogy(1)
     canvas.SetTicks(1,1)
     canvas.SetLeftMargin(0.14)
     canvas.SetRightMargin(0.08)
     canvas.SetGridx()
-    #canvas.SetGridy()
+    #CLEMENT
+    canvas.SetGridy()
 
     lg = r.TLegend(0.6,0.18,0.78,0.33)
     lg.SetFillStyle(0)
     lg.SetLineColor(0)
     lg.SetBorderSize(0)
     lg.SetShadowColor(10)
-    lg.SetTextSize(0.040)
+    #CLEMENT
+    #lg.SetTextSize(0.040)
+    lg.SetTextSize(0.030)
     lg.SetTextFont(42)
 
 
@@ -231,6 +247,7 @@ if __name__=="__main__":
         dicgraph[str(s)].SetName(ana)
         dicgraph[str(s)].SetTitle( "" )
         dicgraph[str(s)].GetXaxis().SetTitle( "Mass [TeV]" )
+        #CLEMENT
         dicgraph[str(s)].GetYaxis().SetTitle( "Int. Luminosity [fb^{-1}]" )
         dicgraph[str(s)].GetXaxis().SetLimits(xmin, xmax)
         if Disco[0]>1E+2:
@@ -242,7 +259,16 @@ if __name__=="__main__":
         else:
             dicgraph[str(s)].SetMinimum(1E-1)
 
+        #BEGIN CLEMENT HACK
+        #dicgraph[str(s)].SetMinimum(1E+0)
+        #END CLEMENT HACK
+
+
         if Disco[0]<1E+6: dicgraph[str(s)].SetMaximum(1E+6)
+        #BEGIN CLEMENT HACK
+        #dicgraph[str(s)].SetMaximum(7E+1)
+        #END CLEMENT HACK
+
         if Disco[0]>Disco[len(Disco)-1]: dicgraph[str(s)].SetMaximum(Disco[0]*100.)
         dicgraph[str(s)].GetXaxis().SetTitleOffset(1.3)
         dicgraph[str(s)].GetYaxis().SetTitleOffset(1.6)
@@ -262,6 +288,13 @@ if __name__=="__main__":
       lg_lbl=lg_lbl.replace('10p','10%')
       lg_lbl=lg_lbl.replace('15p','15%')
       lg_lbl=lg_lbl.replace('20p','20%')
+
+      lg_lbl=lg_lbl.replace('nominal','#sigma_{E}/E = 3%')
+      lg_lbl=lg_lbl.replace('6%','#sigma_{E}/E = 6%')
+      lg_lbl=lg_lbl.replace('9%','#sigma_{E}/E = 9%')
+      lg_lbl=lg_lbl.replace('12%','#sigma_{E}/E = 12%')
+      lg_lbl=lg_lbl.replace('15%','#sigma_{E}/E = 15%')
+
       lg.AddEntry(dicgraph[str(s)],lg_lbl,"L")
     if len(signiList)>1 : lg.Draw()
 
@@ -306,6 +339,10 @@ if __name__=="__main__":
     elif 'tautau' in namesList                        : the_ana='tautau'
     elif 'mumu_flav_ano' in namesList                 : the_ana='mumu_flav_ano'
     elif 'mumu_LQ'in namesList                        : the_ana='mumu_LQ'
+    #CLEMENT
+    elif 'nominal'in namesList                        : the_ana='zpjj'
+    elif 'FCC'in namesList                            : the_ana='mumu'
+
     else : print "No associated channel, give it yourself by making your case for the_ana"
     # define the associated channel
     plotname = ""
@@ -323,6 +360,9 @@ if __name__=="__main__":
     if the_ana=='tautau'        : plotname+="Z\'_{SSM} #rightarrow #tau^{+}#tau^{-}"
     if the_ana=='mumu_flav_ano' : plotname+="Z\' #rightarrow #mu^{+}#mu^{-} (1710.06363)"
     if the_ana=='mumu_LQ'       : plotname+="t-channel LQ #rightarrow #mu^{+}#mu^{-} (1710.06363)"
+    if the_ana=='zpjj'          : plotname+="Z\'_{SSM} #rightarrow jj"
+    if the_ana=='FCC'           : plotname+="Z\'_{SSM} #rightarrow #mu^{+}#mu^{-}"
+
     # automatic position of caption
     left_pos=0.18
     center_pos=0.44
@@ -386,14 +426,16 @@ if __name__=="__main__":
       label.DrawLatex(0.18,0.83, "#bf{#it{#sqrt{s} = 100 TeV}}")
 
     label.SetTextSize(0.03)
-    label.DrawLatex(0.2,0.14, "Integrated luminosity versus mass for a 5 #sigma discovery")
+#CLEMENT
+#    label.DrawLatex(0.2,0.14, "Integrated luminosity versus mass for a 5 #sigma discovery")
+    label.DrawLatex(0.2,0.14, "5 #sigma discovery")
     label.SetTextSize(0.036)
     if the_pos==left_pos : label.DrawLatex(the_pos,0.78, plotname)
     else                 : label.DrawLatex(the_pos+0.3,0.83, plotname)
 
     label.SetTextSize(0.03)
     label.SetNDC(False)
-    mass_for_latex=int(xmin)*1.5
+    mass_for_latex=int(xmin)*1.68
 
     if ops.helhc:
         label.DrawLatex(mass_for_latex,0.7*15E+3, "15 ab^{-1}")

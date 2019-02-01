@@ -1,5 +1,5 @@
 #!/bin/bash
-#to run ./scripts/FCC/Zprime_jj/run_limits.sh fcc_v02 _sel1/_sel1_5p/_sel1_10p/_sel1_15p/_sel1_20p
+#to run ./scripts/FCC/Zprime_jj/run_limits.sh fcc_v02 _sel1/_sel1_5p/_sel1_10p/_sel1_15p/_sel1_20p/_sel1_2t/_sel1_3t/_sel1_4t/_sel1_5t
 
 myversion=$1
 sel=$2
@@ -14,4 +14,3 @@ do
     ./myFit.exe l config_FCC/Zprime_jj/"$myversion"/dijet"$sel"_"$ene"TeV.config
 
 done
-
